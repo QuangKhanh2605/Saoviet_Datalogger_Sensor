@@ -15,6 +15,13 @@
 #define ID_DEFAULT_SS_CLO       8
 #define ID_DEFAULT_SS_TURBIDITY 9
 
+#define DEFAULT_SCALE_CLO           0xFE
+#define DEFAULT_SCALE_PH            0xFE
+#define DEFAULT_SCALE_NTU           0xFE
+#define DEFAULT_SCALE_SALINITY      0xFE
+#define DEFAULT_SCALE_TEMPERATURE   0xFE
+#define DEFAULT_SCALE_EC            0x00
+
 typedef enum
 {
     _EVENT_RS485_ENTRY,
@@ -34,9 +41,9 @@ typedef enum
     _RS485_SS_PH_OPERA = 0,
     _RS485_SS_CLO_SEND_PH,
     _RS485_SS_EC_OPERA,
-    _RS485_SS_CLO_OPERA, 
     _RS485_SS_CLO_PH,
     _RS485_SS_TURBIDITY_OPERA,
+    _RS485_SS_CLO_OPERA,
     
     _RS485_SS_PH_CALIB_READ_AD,
     _RS485_SS_PH_CALIB_READ_POINT_CALIB,

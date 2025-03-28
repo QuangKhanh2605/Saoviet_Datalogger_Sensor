@@ -107,6 +107,15 @@ typedef enum
     _GET_FREQ_WARNING_SENSOR,
     _SET_FREQ_WARNING_SENSOR,
     
+    _GET_OFFSET_CLO,
+    _SET_OFFSET_CLO,
+    
+    _GET_OFFSET_PH,
+    _SET_OFFSET_PH,
+    
+    _GET_OFFSET_NTU,
+    _SET_OFFSET_NTU,
+    
     _END_AT_CMD,
 }Type_Command_AT_PC;
 

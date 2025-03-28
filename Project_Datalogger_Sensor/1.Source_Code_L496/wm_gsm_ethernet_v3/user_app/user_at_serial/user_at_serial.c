@@ -100,6 +100,15 @@ struct_CheckList_AT CheckList_AT_CONFIG[] =
         {_GET_FREQ_WARNING_SENSOR, NULL,        {(uint8_t*)"at+freqwarningsensor?",21}},
         {_SET_FREQ_WARNING_SENSOR, NULL,        {(uint8_t*)"at+freqwarningsensor=",21}},
         
+        {_GET_OFFSET_CLO,       NULL,           {(uint8_t*)"at+offsetclo?",13}},
+        {_SET_OFFSET_CLO,       NULL,           {(uint8_t*)"at+offsetclo=",13}},
+        
+        {_GET_OFFSET_PH,        NULL,           {(uint8_t*)"at+offsetph?",12}},
+        {_SET_OFFSET_PH,        NULL,           {(uint8_t*)"at+offsetph=",12}},
+        
+        {_GET_OFFSET_NTU,       NULL,           {(uint8_t*)"at+offsetntu?",13}},
+        {_SET_OFFSET_NTU,       NULL,           {(uint8_t*)"at+offsetntu=",13}},
+        
         {_END_AT_CMD,	        NULL,           {(uint8_t*)"at+end",6}},
 };
 

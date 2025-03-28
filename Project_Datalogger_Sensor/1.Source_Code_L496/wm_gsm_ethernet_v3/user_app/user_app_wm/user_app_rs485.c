@@ -111,7 +111,7 @@ static uint8_t fevent_rs485_transmit(uint8_t event)
           break;
           
         default:
-          if(sKindMode485.Trans < _RS485_SS_TURBIDITY_OPERA)
+          if(sKindMode485.Trans < _RS485_SS_CLO_OPERA)
           {
               sKindMode485.Trans++;
           }
@@ -358,11 +358,11 @@ void Handle_Data_Trans_SS_Clo(sData *sFrame, uint8_t KindTrans)
     {
         //Trans Opera
         case _RS485_SS_CLO_SEND_PH:
-            if(sSensor_pH.sPH_Value.Value > 500 && sSensor_pH.sPH_Value.Value < 900)
-                ph_Send_f = Handle_int32_To_Float_Scale(sSensor_pH.sPH_Value.Value, 0xFE);
-            else if(sSensor_pH.sPH_Value.Value == 0)
+            if(sDataSensorMeasure.spH_Water.Value > 500 && sDataSensorMeasure.spH_Water.Value < 900)
+                ph_Send_f = Handle_int32_To_Float_Scale(sDataSensorMeasure.spH_Water.Value, 0xFE);
+            else if(sDataSensorMeasure.spH_Water.Value == 0)
                 ph_Send_f = Handle_int32_To_Float_Scale(700, 0xFE);
-            else if(sSensor_pH.sPH_Value.Value <= 500)
+            else if(sDataSensorMeasure.spH_Water.Value <= 500)
                 ph_Send_f = Handle_int32_To_Float_Scale(500, 0xFE);
             else
                 ph_Send_f = Handle_int32_To_Float_Scale(900, 0xFE);
@@ -375,12 +375,12 @@ void Handle_Data_Trans_SS_Clo(sData *sFrame, uint8_t KindTrans)
             ModRTU_Master_Write_Frame(sFrame, ID_DEFAULT_SS_CLO, 0x10, 0x0026, 2, aData);
             break;
             
-        case _RS485_SS_CLO_OPERA:
-            ModRTU_Master_Read_Frame(sFrame, ID_DEFAULT_SS_CLO, 0x03, 0x0001, 0x04);
-            break;
-            
         case _RS485_SS_CLO_PH:
             ModRTU_Master_Read_Frame(sFrame, ID_DEFAULT_SS_CLO, 0x03, 0x0026, 0x02);
+            break;
+            
+        case _RS485_SS_CLO_OPERA:
+            ModRTU_Master_Read_Frame(sFrame, ID_DEFAULT_SS_CLO, 0x03, 0x0001, 0x04);
             break;
      
         //Trans Calib
@@ -422,6 +422,13 @@ void Handle_Data_Recv_SS_Clo(sData sDataRS485, uint8_t KindRecv)
         case  _RS485_SS_CLO_SEND_PH:
           break;
       
+        case _RS485_SS_CLO_PH:
+          Pos = 3;
+          
+          Stamp_Hex = Read_Register_Rs485(sDataRS485.Data_a8, &Pos, 4);
+          sSensor_Clo.sPH.Value =  Handle_HexFloat_To_Int32_Round(Stamp_Hex, sSensor_Clo.sPH.Scale);
+          break;
+          
         case _RS485_SS_CLO_OPERA:
           Pos = 3;
             
@@ -430,13 +437,6 @@ void Handle_Data_Recv_SS_Clo(sData sDataRS485, uint8_t KindRecv)
           
           Stamp_Hex = Read_Register_Rs485(sDataRS485.Data_a8, &Pos, 4);
           sSensor_Clo.sTemperature_Value.Value =  Handle_HexFloat_To_Int32_Round(Stamp_Hex, sSensor_Clo.sTemperature_Value.Scale);
-          break;
-          
-        case _RS485_SS_CLO_PH:
-          Pos = 3;
-          
-          Stamp_Hex = Read_Register_Rs485(sDataRS485.Data_a8, &Pos, 4);
-          sSensor_Clo.sPH.Value =  Handle_HexFloat_To_Int32_Round(Stamp_Hex, sSensor_Clo.sPH.Scale);
           break;
           
         //Recv Calib
@@ -470,8 +470,8 @@ void Handle_State_SS_Clo(uint8_t KindRecv, uint8_t KindDetect)
     switch(KindRecv)
     {
         case _RS485_SS_CLO_SEND_PH:
-        case _RS485_SS_CLO_OPERA:  
         case _RS485_SS_CLO_PH:
+        case _RS485_SS_CLO_OPERA:  
         case _RS485_SS_CLO_CALIB_READ_AD:
         case _RS485_SS_CLO_CALIB_READ_SOLUTION:
         case _RS485_SS_CLO_CALIB_STD_SOLUTION:
@@ -892,57 +892,82 @@ void Handle_Data_Measure(uint8_t KindRecv)
             sDataSensorMeasure.spH_Water = sSensor_pH.sPH_Value;
             
             quickSort_Sampling_pH();
+            sOffsetMeasure.spH_Water_Sampling.Value = sDataSensorMeasure.spH_Water.Value;
+            
+            if(sDataSensorMeasure.spH_Water.Value + sOffsetMeasure.spH_Water.Value >= 0)
+                sDataSensorMeasure.spH_Water.Value += sOffsetMeasure.spH_Water.Value;
           break;
           
         case _RS485_SS_CLO_OPERA:
             sDataSensorMeasure.sClo_Du = sSensor_Clo.sClo_Value;
             sDataSensorMeasure.sTemperature = sSensor_Clo.sTemperature_Value;
+            
             quickSort_Sampling_Clo();
+            sOffsetMeasure.sClo_Du_Sampling.Value = sDataSensorMeasure.sClo_Du.Value;
+            sOffsetMeasure.sTemperature_Sampling.Value = sDataSensorMeasure.sTemperature.Value;
+            
+            if(sDataSensorMeasure.sClo_Du.Value + sOffsetMeasure.sClo_Du.Value >= 0)
+                sDataSensorMeasure.sClo_Du.Value += sOffsetMeasure.sClo_Du.Value;
+
+            if(sDataSensorMeasure.sTemperature.Value + sOffsetMeasure.sTemperature.Value >= 0)
+                sDataSensorMeasure.sTemperature.Value += sOffsetMeasure.sTemperature.Value;
           break;
           
         case _RS485_SS_EC_OPERA:
             sDataSensorMeasure.sEC = sSensor_EC.sConductivity_Value;
             sDataSensorMeasure.sSalinity = sSensor_EC.sSalinity_Value;
             quickSort_Sampling_EC();
+            sOffsetMeasure.sEC_Sampling.Value = sDataSensorMeasure.sEC.Value;
+            sOffsetMeasure.sSalinity_Sampling.Value = sDataSensorMeasure.sSalinity.Value;
+            
+            if(sDataSensorMeasure.sEC.Value + sOffsetMeasure.sEC.Value >= 0)
+                sDataSensorMeasure.sEC.Value += sOffsetMeasure.sEC.Value;
+            
+            if(sDataSensorMeasure.sSalinity.Value + sOffsetMeasure.sSalinity.Value >= 0)
+                sDataSensorMeasure.sSalinity.Value += sOffsetMeasure.sSalinity.Value;
           break;
           
         case _RS485_SS_TURBIDITY_OPERA:
             sDataSensorMeasure.sNTU = sSensor_Turbidity.sNTU_Value;
             quickSort_Sampling_Turbidity();
+            sOffsetMeasure.sNTU_Sampling.Value = sDataSensorMeasure.sNTU.Value;
+            
+            if(sDataSensorMeasure.sNTU.Value + sOffsetMeasure.sNTU.Value >= 0)
+                sDataSensorMeasure.sNTU.Value += sOffsetMeasure.sNTU.Value;
           break;
           
         default:
           break;
     }
     
-    if(sSensor_pH.sPH_Value.Value == 0)
+    if(sSensor_pH.State_Connect == _SENSOR_DISCONNECT)
     {
-        sDataSensorMeasure.spH_Water = sSensor_pH.sPH_Value;
+        sDataSensorMeasure.spH_Water.Value = 0;
     }
     
-    if(sSensor_Clo.sClo_Value.Value == 0)
+    if(sSensor_Clo.State_Connect == _SENSOR_DISCONNECT)
     {
-        sDataSensorMeasure.sClo_Du = sSensor_Clo.sClo_Value;
+        sDataSensorMeasure.sClo_Du.Value = 0;
     }
     
-    if(sSensor_Clo.sTemperature_Value.Value == 0)
+    if(sSensor_Clo.State_Connect == _SENSOR_DISCONNECT)
     {
-        sDataSensorMeasure.sTemperature = sSensor_Clo.sTemperature_Value;
+        sDataSensorMeasure.sTemperature.Value = 0;
     }
     
-    if(sSensor_EC.sConductivity_Value.Value == 0)
+    if(sSensor_EC.State_Connect == _SENSOR_DISCONNECT)
     {
-        sDataSensorMeasure.sEC = sSensor_EC.sConductivity_Value;
+        sDataSensorMeasure.sEC.Value = 0;
     }
     
-    if(sSensor_EC.sSalinity_Value.Value == 0)
+    if(sSensor_EC.State_Connect == _SENSOR_DISCONNECT)
     {
-        sDataSensorMeasure.sSalinity = sSensor_EC.sSalinity_Value;
+        sDataSensorMeasure.sSalinity.Value = 0;
     }
     
-    if(sSensor_Turbidity.sNTU_Value.Value == 0)
+    if(sSensor_Turbidity.State_Connect == _SENSOR_DISCONNECT)
     {
-        sDataSensorMeasure.sNTU = sSensor_Turbidity.sNTU_Value;
+        sDataSensorMeasure.sNTU.Value = 0;
     }
 }
 /*==========================Handle==========================*/
@@ -1011,31 +1036,31 @@ void        Init_IdSlave(void)
 
 void        Init_Parameter_Sensor(void)
 {
-    sSensor_pH.sPH_Value.Scale                  = 0xFE;
-    sSensor_pH.sTemperature_Value.Scale         = 0xFE;
+    sSensor_pH.sPH_Value.Scale                  = DEFAULT_SCALE_PH;
+    sSensor_pH.sTemperature_Value.Scale         = DEFAULT_SCALE_TEMPERATURE;
     sSensor_pH.sZero_Calib.Value                = 0;
     sSensor_pH.sZero_Calib.Scale                = 0xFE;
     sSensor_pH.sSlope_Calib.Value               = 0;
     sSensor_pH.sSlope_Calib.Scale               = 0xFE;
     
-    sSensor_Clo.sClo_Value.Scale                = 0xFE;
-    sSensor_Clo.sTemperature_Value.Scale        = 0xFE;
+    sSensor_Clo.sClo_Value.Scale                = DEFAULT_SCALE_CLO;
+    sSensor_Clo.sTemperature_Value.Scale        = DEFAULT_SCALE_TEMPERATURE;
     sSensor_Clo.sPH.Scale                       = 0xFE;
     sSensor_Clo.sSolution_Calibration.Value     = 100;
     sSensor_Clo.sSolution_Calibration.Scale     = 0xFE;
     
-    sSensor_EC.sConductivity_Value.Scale        = 0x00;
+    sSensor_EC.sConductivity_Value.Scale        = DEFAULT_SCALE_EC;
     sSensor_EC.sResistivity_Value.Scale         = 0xFE;
-    sSensor_EC.sSalinity_Value.Scale            = 0xFE;
+    sSensor_EC.sSalinity_Value.Scale            = DEFAULT_SCALE_SALINITY;
     sSensor_EC.sTDS_Value.Scale                 = 0xFE;
-    sSensor_EC.sTemperature_Value.Scale         = 0xFE;
+    sSensor_EC.sTemperature_Value.Scale         = DEFAULT_SCALE_TEMPERATURE;
     
     sSensor_EC.sConductivity_Calib.Scale        = 0x00;
     sSensor_EC.sConductivity_Const.Value        = 1000;
     sSensor_EC.sConductivity_Const.Scale        = 0xFD;
     
-    sSensor_Turbidity.sNTU_Value.Scale          = 0xFE;
-    sSensor_Turbidity.sTemperature_Value.Scale  = 0xFE;
+    sSensor_Turbidity.sNTU_Value.Scale          = DEFAULT_SCALE_NTU;
+    sSensor_Turbidity.sTemperature_Value.Scale  = DEFAULT_SCALE_TEMPERATURE;
     sSensor_Turbidity.sFirst_Calibration.Scale  = 0xFE;
     sSensor_Turbidity.sSecond_Calibration.Scale = 0xFE;
     sSensor_Turbidity.sThird_Calibration.Scale  = 0xFE;

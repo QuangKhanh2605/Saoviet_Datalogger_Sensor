@@ -13,13 +13,15 @@ static uint8_t fevent_sensor_state_turbidity(uint8_t event);
 /*=================== struct ==================*/
 sEvent_struct               sEventAppSensor[] = 
 {
-  {_EVENT_SENSOR_ENTRY,              1, 5, 30000,                fevent_sensor_entry},
+  {_EVENT_SENSOR_ENTRY,              1, 5, 60000,                fevent_sensor_entry},
   
   {_EVENT_SENSOR_STATE_PH,           0, 5, 500,                  fevent_sensor_state_ph},
   {_EVENT_SENSOR_STATE_CLO,          0, 5, 500,                  fevent_sensor_state_clo},
   {_EVENT_SENSOR_STATE_EC,           0, 5, 500,                  fevent_sensor_state_ec},
   {_EVENT_SENSOR_STATE_TURBIDITY,    0, 5, 500,                  fevent_sensor_state_turbidity},
 };
+
+Struct_Offset_Measure   sOffsetMeasure = {0};
 
 uint8_t DurationTimeWarningSensor = 0;
 
@@ -269,7 +271,268 @@ void AT_CMD_Set_Time_Warning_Sensor (sData *str_Receiv, uint16_t Pos)
         Modem_Respond(PortConfig, (uint8_t*)"ERROR", 5, 0);
     }
 }
+
+void AT_CMD_Get_Offset_Clo (sData *str, uint16_t Pos)
+{
+    uint8_t aTemp[50] = "Offset Clo: ";   //13 ki tu dau tien
+    sData StrResp = {&aTemp[0], 12}; 
+
+    Convert_Point_Int_To_String_Scale (aTemp, &StrResp.Length_u16, (int)(sOffsetMeasure.sClo_Du.Value), sOffsetMeasure.sClo_Du.Scale);
+    Insert_String_To_String(aTemp, &StrResp.Length_u16, (uint8_t*)" mg/L",0 , 5);
+
+	Modem_Respond(PortConfig, StrResp.Data_a8, StrResp.Length_u16, 0);
+}
+
+void AT_CMD_Set_Offset_Clo (sData *str_Receiv, uint16_t Pos)
+{
+    uint32_t TempU32 = 0;
+    Struct_SS_Value sMeasure;
+    if( str_Receiv->Data_a8[0] >= '0' && str_Receiv->Data_a8[0] <= '9')
+    {
+        uint8_t length = 0;
+        for(uint8_t i = 0; i < str_Receiv->Length_u16; i++)
+        {
+            if( str_Receiv->Data_a8[i] < '0' || str_Receiv->Data_a8[i]>'9') break;
+            else length++;
+        }
+        TempU32 = Convert_String_To_Dec(str_Receiv->Data_a8 , length);
+        if(TempU32 <= 32765)
+        {
+            sMeasure.Value = TempU32;
+            Save_OffsetMeasure(_OFFSET_CLO_DU, sMeasure);
+            Modem_Respond(PortConfig, (uint8_t*)"OK", 2, 0);
+        }
+        else
+        {
+            Modem_Respond(PortConfig, (uint8_t*)"ERROR", 5, 0);
+        }
+    }
+    else
+    {
+        Modem_Respond(PortConfig, (uint8_t*)"ERROR", 5, 0);
+    }
+}
+
+void AT_CMD_Get_Offset_pH (sData *str, uint16_t Pos)
+{
+    uint8_t aTemp[50] = "Offset pH: ";   //13 ki tu dau tien
+    sData StrResp = {&aTemp[0], 11}; 
+
+    Convert_Point_Int_To_String_Scale (aTemp, &StrResp.Length_u16, (int)(sOffsetMeasure.spH_Water.Value), sOffsetMeasure.spH_Water.Scale);
+    Insert_String_To_String(aTemp, &StrResp.Length_u16, (uint8_t*)" pH",0 , 3);
+
+	Modem_Respond(PortConfig, StrResp.Data_a8, StrResp.Length_u16, 0);
+}
+
+void AT_CMD_Set_Offset_pH (sData *str_Receiv, uint16_t Pos)
+{
+    uint32_t TempU32 = 0;
+    Struct_SS_Value sMeasure;
+    if( str_Receiv->Data_a8[0] >= '0' && str_Receiv->Data_a8[0] <= '9')
+    {
+        uint8_t length = 0;
+        for(uint8_t i = 0; i < str_Receiv->Length_u16; i++)
+        {
+            if( str_Receiv->Data_a8[i] < '0' || str_Receiv->Data_a8[i]>'9') break;
+            else length++;
+        }
+        TempU32 = Convert_String_To_Dec(str_Receiv->Data_a8 , length);
+        if(TempU32 <= 32765)
+        {
+            sMeasure.Value = TempU32;
+            Save_OffsetMeasure(_OFFSET_PH, sMeasure);
+            Modem_Respond(PortConfig, (uint8_t*)"OK", 2, 0);
+        }
+        else
+        {
+            Modem_Respond(PortConfig, (uint8_t*)"ERROR", 5, 0);
+        }
+    }
+    else
+    {
+        Modem_Respond(PortConfig, (uint8_t*)"ERROR", 5, 0);
+    }
+}
+void AT_CMD_Get_Offset_NTU (sData *str, uint16_t Pos)
+{
+    uint8_t aTemp[50] = "Offset NTU: ";   //13 ki tu dau tien
+    sData StrResp = {&aTemp[0], 12}; 
+
+    Convert_Point_Int_To_String_Scale (aTemp, &StrResp.Length_u16, (int)(sOffsetMeasure.sNTU.Value), sOffsetMeasure.sNTU.Scale);
+    Insert_String_To_String(aTemp, &StrResp.Length_u16, (uint8_t*)" NTU",0 , 4);
+
+	Modem_Respond(PortConfig, StrResp.Data_a8, StrResp.Length_u16, 0);
+}
+
+void AT_CMD_Set_Offset_NTU (sData *str_Receiv, uint16_t Pos)
+{
+    uint32_t TempU32 = 0;
+    Struct_SS_Value sMeasure;
+    if( str_Receiv->Data_a8[0] >= '0' && str_Receiv->Data_a8[0] <= '9')
+    {
+        uint8_t length = 0;
+        for(uint8_t i = 0; i < str_Receiv->Length_u16; i++)
+        {
+            if( str_Receiv->Data_a8[i] < '0' || str_Receiv->Data_a8[i]>'9') break;
+            else length++;
+        }
+        TempU32 = Convert_String_To_Dec(str_Receiv->Data_a8 , length);
+        if(TempU32 <= 32765)
+        {
+            sMeasure.Value = TempU32;
+            Save_OffsetMeasure(_OFFSET_NTU, sMeasure);
+            Modem_Respond(PortConfig, (uint8_t*)"OK", 2, 0);
+        }
+        else
+        {
+            Modem_Respond(PortConfig, (uint8_t*)"ERROR", 5, 0);
+        }
+    }
+    else
+    {
+        Modem_Respond(PortConfig, (uint8_t*)"ERROR", 5, 0);
+    }
+}
 #endif
+/*===================Save and Init Offset Measure=================*/
+void Save_OffsetMeasure(uint8_t KindOffset, Struct_SS_Value sMeasure)
+{
+#ifdef USING_INTERNAL_MEM
+    uint8_t aData[20] = {0};
+    uint8_t length = 0;
+
+    aData[length++] = sOffsetMeasure.sClo_Du.Value >> 8;
+    aData[length++] = sOffsetMeasure.sClo_Du.Value;
+    
+    aData[length++] = sOffsetMeasure.spH_Water.Value >> 8;
+    aData[length++] = sOffsetMeasure.spH_Water.Value;
+    
+    aData[length++] = sOffsetMeasure.sNTU.Value >> 8;
+    aData[length++] = sOffsetMeasure.sNTU.Value;
+    
+    aData[length++] = sOffsetMeasure.sSalinity.Value >> 8;
+    aData[length++] = sOffsetMeasure.sSalinity.Value;
+    
+    aData[length++] = sOffsetMeasure.sTemperature.Value >> 8;
+    aData[length++] = sOffsetMeasure.sTemperature.Value;
+    
+    aData[length++] = sOffsetMeasure.sEC.Value >> 8;
+    aData[length++] = sOffsetMeasure.sEC.Value;
+    
+    switch(KindOffset)
+    {
+        case _OFFSET_CLO_DU:
+          if(sMeasure.Value != 0)
+              sOffsetMeasure.sClo_Du.Value = sMeasure.Value - sOffsetMeasure.sClo_Du_Sampling.Value;
+          else
+              sOffsetMeasure.sClo_Du.Value = 0;
+          
+          aData[0] = sOffsetMeasure.sClo_Du.Value >> 8;
+          aData[1] = sOffsetMeasure.sClo_Du.Value;
+          break;
+          
+        case _OFFSET_PH:
+          if(sMeasure.Value != 0)
+              sOffsetMeasure.spH_Water.Value = sMeasure.Value - sOffsetMeasure.spH_Water_Sampling.Value;
+          else
+              sOffsetMeasure.spH_Water.Value = 0;
+          
+          aData[2] = sOffsetMeasure.spH_Water.Value >> 8;
+          aData[3] = sOffsetMeasure.spH_Water.Value;
+          break;
+          
+        case _OFFSET_NTU:
+          if(sMeasure.Value != 0)
+              sOffsetMeasure.sNTU.Value = sMeasure.Value - sOffsetMeasure.sNTU_Sampling.Value;
+          else
+              sOffsetMeasure.sNTU.Value = 0;
+          
+          aData[4] = sOffsetMeasure.sNTU.Value >> 8;
+          aData[5] = sOffsetMeasure.sNTU.Value;
+          break;
+          
+        case _OFFSET_SALINITY:
+          if(sMeasure.Value != 0)
+              sOffsetMeasure.sSalinity.Value = sMeasure.Value - sOffsetMeasure.sSalinity_Sampling.Value;
+          else
+              sOffsetMeasure.sSalinity.Value = 0;
+          
+          aData[6] = sOffsetMeasure.sSalinity.Value >> 8;
+          aData[7] = sOffsetMeasure.sSalinity.Value;
+          break;
+          
+        case _OFFSET_TEMPERATURE:
+          if(sMeasure.Value != 0)
+              sOffsetMeasure.sTemperature.Value = sMeasure.Value - sOffsetMeasure.sTemperature_Sampling.Value;
+          else
+              sOffsetMeasure.sTemperature.Value = 0;
+          
+          aData[8] = sOffsetMeasure.sTemperature.Value >> 8;
+          aData[9] = sOffsetMeasure.sTemperature.Value;
+          break;
+          
+        case _OFFSET_EC:
+          if(sMeasure.Value != 0)
+              sOffsetMeasure.sEC.Value = sMeasure.Value - sOffsetMeasure.sEC_Sampling.Value;
+          else
+              sOffsetMeasure.sEC.Value = 0;
+          
+          aData[10] = sOffsetMeasure.sEC.Value >> 8;
+          aData[11] = sOffsetMeasure.sEC.Value;
+          break;
+          
+        default:
+          break;
+    }
+    
+    Save_Array(ADDR_OFFSET_MEASURE, aData, length);
+#endif
+}
+
+void Init_OffsetMeasure(void)
+{
+#ifdef USING_INTERNAL_MEM
+    if(*(__IO uint8_t*)(ADDR_OFFSET_MEASURE) != FLASH_BYTE_EMPTY)
+    {
+        sOffsetMeasure.sClo_Du.Value = *(__IO uint8_t*)(ADDR_OFFSET_MEASURE+2) <<8;
+        sOffsetMeasure.sClo_Du.Value |= *(__IO uint8_t*)(ADDR_OFFSET_MEASURE+3);
+        
+        sOffsetMeasure.spH_Water.Value  = *(__IO uint8_t*)(ADDR_OFFSET_MEASURE+4) <<8;
+        sOffsetMeasure.spH_Water.Value |= *(__IO uint8_t*)(ADDR_OFFSET_MEASURE+5);
+        
+        sOffsetMeasure.sNTU.Value = *(__IO uint8_t*)(ADDR_OFFSET_MEASURE+6) <<8;
+        sOffsetMeasure.sNTU.Value |= *(__IO uint8_t*)(ADDR_OFFSET_MEASURE+7);
+        
+        sOffsetMeasure.sSalinity.Value = *(__IO uint8_t*)(ADDR_OFFSET_MEASURE+8) <<8;
+        sOffsetMeasure.sSalinity.Value |= *(__IO uint8_t*)(ADDR_OFFSET_MEASURE+9);
+        
+        sOffsetMeasure.sTemperature.Value  = *(__IO uint8_t*)(ADDR_OFFSET_MEASURE+10) <<8;
+        sOffsetMeasure.sTemperature.Value |= *(__IO uint8_t*)(ADDR_OFFSET_MEASURE+11);
+        
+        sOffsetMeasure.sEC.Value = *(__IO uint8_t*)(ADDR_OFFSET_MEASURE+12) <<8;
+        sOffsetMeasure.sEC.Value |= *(__IO uint8_t*)(ADDR_OFFSET_MEASURE+13);
+    }
+    
+    sOffsetMeasure.sClo_Du.Scale = DEFAULT_SCALE_CLO;
+    sOffsetMeasure.sClo_Du_Sampling.Scale = DEFAULT_SCALE_CLO;
+    
+    sOffsetMeasure.spH_Water.Scale = DEFAULT_SCALE_PH;
+    sOffsetMeasure.spH_Water_Sampling.Scale = DEFAULT_SCALE_PH;
+    
+    sOffsetMeasure.sNTU.Scale = DEFAULT_SCALE_NTU;
+    sOffsetMeasure.sNTU_Sampling.Scale = DEFAULT_SCALE_NTU;
+    
+    sOffsetMeasure.sSalinity.Scale = DEFAULT_SCALE_SALINITY;
+    sOffsetMeasure.sSalinity_Sampling.Scale = DEFAULT_SCALE_SALINITY;
+    
+    sOffsetMeasure.sTemperature.Scale = DEFAULT_SCALE_TEMPERATURE;
+    sOffsetMeasure.sTemperature_Sampling.Scale = DEFAULT_SCALE_TEMPERATURE;
+    
+    sOffsetMeasure.sEC.Scale = DEFAULT_SCALE_EC;
+    sOffsetMeasure.sEC_Sampling.Scale = DEFAULT_SCALE_EC;
+#endif    
+}
+
 /*====================Save and Init Time Warning==================*/
 void Save_TimeWarningSensor(uint8_t Duration)
 {
@@ -368,7 +631,7 @@ void quickSort_Sampling_pH(void)
             Handle_Once = 1;
             for(uint8_t i = 0; i< NUMBER_SAMPLING_SS; i++)
             {
-//              aSampling_STT_pH[i] = i;
+              aSampling_STT_pH[i] = i;
               
               if(aSampling_VALUE_pH[i] == 0)
                 aSampling_VALUE_pH[i] = sSensor_pH.sPH_Value.Value;
@@ -412,7 +675,7 @@ void quickSort_Sampling_Clo(void)
             Handle_Once = 1;
             for(uint8_t i = 0; i< NUMBER_SAMPLING_SS; i++)
             {
-//              aSampling_STT_Clo[i] = i;
+              aSampling_STT_Clo[i] = i;
               
               if(aSampling_VALUE_Clo[i] == 0)
                 aSampling_VALUE_Clo[i] = sSensor_Clo.sClo_Value.Value;
@@ -456,7 +719,7 @@ void quickSort_Sampling_EC(void)
             Handle_Once = 1;
             for(uint8_t i = 0; i< NUMBER_SAMPLING_SS; i++)
             {
-//              aSampling_STT_EC[i] = i;
+              aSampling_STT_EC[i] = i;
               
               if(aSampling_VALUE_EC[i] == 0)
                 aSampling_VALUE_EC[i] = sSensor_EC.sConductivity_Value.Value;
@@ -500,7 +763,7 @@ void quickSort_Sampling_Turbidity(void)
             Handle_Once = 1;
             for(uint8_t i = 0; i< NUMBER_SAMPLING_SS; i++)
             {
-//              aSampling_STT_Turbidity[i] = i;
+              aSampling_STT_Turbidity[i] = i;
               
               if(aSampling_VALUE_Turbidity[i] == 0)
                 aSampling_VALUE_Turbidity[i] = sSensor_Turbidity.sNTU_Value.Value;
@@ -516,7 +779,7 @@ void quickSort_Sampling_Turbidity(void)
                 if(aSampling_STT_Turbidity[i] == NUMBER_SAMPLING_SS - 1)
                 {
                     aSampling_STT_Turbidity[i] = 0;
-                    aSampling_VALUE_Turbidity[i] = sSensor_EC.sConductivity_Value.Value;
+                    aSampling_VALUE_Turbidity[i] = sSensor_Turbidity.sNTU_Value.Value;
                 }
                 else
                     aSampling_STT_Turbidity[i] = aSampling_STT_Turbidity[i] + 1;
@@ -527,15 +790,24 @@ void quickSort_Sampling_Turbidity(void)
         }
     }
 }
-
 /*=====================Handle Task and Init app===================*/
 void Init_AppSensor(void)
 {
     Init_TimeWarningSensor();
+    Init_OffsetMeasure();
 #ifdef USING_AT_CONFIG
     /* regis cb serial */
     CheckList_AT_CONFIG[_GET_FREQ_WARNING_SENSOR].CallBack = AT_CMD_Get_Time_Warning_Sensor;
     CheckList_AT_CONFIG[_SET_FREQ_WARNING_SENSOR].CallBack = AT_CMD_Set_Time_Warning_Sensor;
+    
+    CheckList_AT_CONFIG[_GET_OFFSET_CLO].CallBack = AT_CMD_Get_Offset_Clo;
+    CheckList_AT_CONFIG[_SET_OFFSET_CLO].CallBack = AT_CMD_Set_Offset_Clo;
+    
+    CheckList_AT_CONFIG[_GET_OFFSET_PH].CallBack = AT_CMD_Get_Offset_pH;
+    CheckList_AT_CONFIG[_SET_OFFSET_PH].CallBack = AT_CMD_Set_Offset_pH;
+    
+    CheckList_AT_CONFIG[_GET_OFFSET_NTU].CallBack = AT_CMD_Get_Offset_NTU;
+    CheckList_AT_CONFIG[_SET_OFFSET_NTU].CallBack = AT_CMD_Set_Offset_NTU;
 #endif
 }
 
