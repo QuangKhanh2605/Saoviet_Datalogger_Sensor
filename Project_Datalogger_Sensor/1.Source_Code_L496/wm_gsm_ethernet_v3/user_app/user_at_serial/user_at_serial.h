@@ -116,6 +116,9 @@ typedef enum
     _GET_OFFSET_NTU,
     _SET_OFFSET_NTU,
     
+    _GET_PH_COMPENSATION,
+    _SET_PH_COMPENSATION,
+    
     _END_AT_CMD,
 }Type_Command_AT_PC;
 

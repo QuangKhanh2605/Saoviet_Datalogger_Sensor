@@ -109,6 +109,9 @@ struct_CheckList_AT CheckList_AT_CONFIG[] =
         {_GET_OFFSET_NTU,       NULL,           {(uint8_t*)"at+offsetntu?",13}},
         {_SET_OFFSET_NTU,       NULL,           {(uint8_t*)"at+offsetntu=",13}},
         
+        {_GET_PH_COMPENSATION,  NULL,           {(uint8_t*)"at+phcompensation?",18}},
+        {_SET_PH_COMPENSATION,  NULL,           {(uint8_t*)"at+phcompensation=",18}},
+        
         {_END_AT_CMD,	        NULL,           {(uint8_t*)"at+end",6}},
 };
 

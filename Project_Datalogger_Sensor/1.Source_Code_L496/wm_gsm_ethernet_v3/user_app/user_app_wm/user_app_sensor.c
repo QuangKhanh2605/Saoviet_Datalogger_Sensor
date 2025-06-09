@@ -299,7 +299,7 @@ void AT_CMD_Set_Offset_Clo (sData *str_Receiv, uint16_t Pos)
         if(TempU32 <= 32765)
         {
             sMeasure.Value = TempU32;
-            Save_OffsetMeasure(_OFFSET_CLO_DU, sMeasure);
+            Save_OffsetMeasure_cmdAT(_OFFSET_CLO_DU, sMeasure);
             Modem_Respond(PortConfig, (uint8_t*)"OK", 2, 0);
         }
         else
@@ -340,7 +340,7 @@ void AT_CMD_Set_Offset_pH (sData *str_Receiv, uint16_t Pos)
         if(TempU32 <= 32765)
         {
             sMeasure.Value = TempU32;
-            Save_OffsetMeasure(_OFFSET_PH, sMeasure);
+            Save_OffsetMeasure_cmdAT(_OFFSET_PH, sMeasure);
             Modem_Respond(PortConfig, (uint8_t*)"OK", 2, 0);
         }
         else
@@ -380,7 +380,7 @@ void AT_CMD_Set_Offset_NTU (sData *str_Receiv, uint16_t Pos)
         if(TempU32 <= 32765)
         {
             sMeasure.Value = TempU32;
-            Save_OffsetMeasure(_OFFSET_NTU, sMeasure);
+            Save_OffsetMeasure_cmdAT(_OFFSET_NTU, sMeasure);
             Modem_Respond(PortConfig, (uint8_t*)"OK", 2, 0);
         }
         else
@@ -395,7 +395,72 @@ void AT_CMD_Set_Offset_NTU (sData *str_Receiv, uint16_t Pos)
 }
 #endif
 /*===================Save and Init Offset Measure=================*/
-void Save_OffsetMeasure(uint8_t KindOffset, Struct_SS_Value sMeasure)
+void Save_OffsetMeasure_cmdAT(uint8_t KindOffset, Struct_SS_Value sMeasure)
+{
+#ifdef USING_INTERNAL_MEM
+    switch(KindOffset)
+    {
+        case _OFFSET_CLO_DU:
+          if(sMeasure.Value != 0)
+              sOffsetMeasure.sClo_Du.Value = sMeasure.Value - sOffsetMeasure.sClo_Du_Sampling.Value;
+          else
+              sOffsetMeasure.sClo_Du.Value = 0;
+          
+          Save_OffsetMeasure(KindOffset, sOffsetMeasure.sClo_Du);
+          break;
+          
+        case _OFFSET_PH:
+          if(sMeasure.Value != 0)
+              sOffsetMeasure.spH_Water.Value = sMeasure.Value - sOffsetMeasure.spH_Water_Sampling.Value;
+          else
+              sOffsetMeasure.spH_Water.Value = 0;
+          
+          Save_OffsetMeasure(KindOffset, sOffsetMeasure.spH_Water);
+          break;
+          
+        case _OFFSET_NTU:
+          if(sMeasure.Value != 0)
+              sOffsetMeasure.sNTU.Value = sMeasure.Value - sOffsetMeasure.sNTU_Sampling.Value;
+          else
+              sOffsetMeasure.sNTU.Value = 0;
+          
+          Save_OffsetMeasure(KindOffset, sOffsetMeasure.sNTU);
+          break;
+          
+        case _OFFSET_SALINITY:
+          if(sMeasure.Value != 0)
+              sOffsetMeasure.sSalinity.Value = sMeasure.Value - sOffsetMeasure.sSalinity_Sampling.Value;
+          else
+              sOffsetMeasure.sSalinity.Value = 0;
+          
+          Save_OffsetMeasure(KindOffset, sOffsetMeasure.sSalinity);
+          break;
+          
+        case _OFFSET_TEMPERATURE:
+          if(sMeasure.Value != 0)
+              sOffsetMeasure.sTemperature.Value = sMeasure.Value - sOffsetMeasure.sTemperature_Sampling.Value;
+          else
+              sOffsetMeasure.sTemperature.Value = 0;
+          
+          Save_OffsetMeasure(KindOffset, sOffsetMeasure.sTemperature);
+          break;
+          
+        case _OFFSET_EC:
+          if(sMeasure.Value != 0)
+              sOffsetMeasure.sEC.Value = sMeasure.Value - sOffsetMeasure.sEC_Sampling.Value;
+          else
+              sOffsetMeasure.sEC.Value = 0;
+          
+          Save_OffsetMeasure(KindOffset, sOffsetMeasure.sEC);
+          break;
+          
+        default:
+          break;
+    }
+#endif
+}
+
+void Save_OffsetMeasure(uint8_t KindOffset, Struct_SS_Value sValueMeasure)
 {
 #ifdef USING_INTERNAL_MEM
     uint8_t aData[20] = {0};
@@ -422,61 +487,37 @@ void Save_OffsetMeasure(uint8_t KindOffset, Struct_SS_Value sMeasure)
     switch(KindOffset)
     {
         case _OFFSET_CLO_DU:
-          if(sMeasure.Value != 0)
-              sOffsetMeasure.sClo_Du.Value = sMeasure.Value - sOffsetMeasure.sClo_Du_Sampling.Value;
-          else
-              sOffsetMeasure.sClo_Du.Value = 0;
-          
+          sOffsetMeasure.sClo_Du = sValueMeasure;
           aData[0] = sOffsetMeasure.sClo_Du.Value >> 8;
           aData[1] = sOffsetMeasure.sClo_Du.Value;
           break;
           
         case _OFFSET_PH:
-          if(sMeasure.Value != 0)
-              sOffsetMeasure.spH_Water.Value = sMeasure.Value - sOffsetMeasure.spH_Water_Sampling.Value;
-          else
-              sOffsetMeasure.spH_Water.Value = 0;
-          
+          sOffsetMeasure.spH_Water = sValueMeasure;
           aData[2] = sOffsetMeasure.spH_Water.Value >> 8;
           aData[3] = sOffsetMeasure.spH_Water.Value;
           break;
           
         case _OFFSET_NTU:
-          if(sMeasure.Value != 0)
-              sOffsetMeasure.sNTU.Value = sMeasure.Value - sOffsetMeasure.sNTU_Sampling.Value;
-          else
-              sOffsetMeasure.sNTU.Value = 0;
-          
+          sOffsetMeasure.sNTU = sValueMeasure;
           aData[4] = sOffsetMeasure.sNTU.Value >> 8;
           aData[5] = sOffsetMeasure.sNTU.Value;
           break;
           
         case _OFFSET_SALINITY:
-          if(sMeasure.Value != 0)
-              sOffsetMeasure.sSalinity.Value = sMeasure.Value - sOffsetMeasure.sSalinity_Sampling.Value;
-          else
-              sOffsetMeasure.sSalinity.Value = 0;
-          
+          sOffsetMeasure.sSalinity = sValueMeasure;
           aData[6] = sOffsetMeasure.sSalinity.Value >> 8;
           aData[7] = sOffsetMeasure.sSalinity.Value;
           break;
           
         case _OFFSET_TEMPERATURE:
-          if(sMeasure.Value != 0)
-              sOffsetMeasure.sTemperature.Value = sMeasure.Value - sOffsetMeasure.sTemperature_Sampling.Value;
-          else
-              sOffsetMeasure.sTemperature.Value = 0;
-          
+          sOffsetMeasure.sTemperature = sValueMeasure;
           aData[8] = sOffsetMeasure.sTemperature.Value >> 8;
           aData[9] = sOffsetMeasure.sTemperature.Value;
           break;
           
         case _OFFSET_EC:
-          if(sMeasure.Value != 0)
-              sOffsetMeasure.sEC.Value = sMeasure.Value - sOffsetMeasure.sEC_Sampling.Value;
-          else
-              sOffsetMeasure.sEC.Value = 0;
-          
+          sOffsetMeasure.sEC = sValueMeasure;
           aData[10] = sOffsetMeasure.sEC.Value >> 8;
           aData[11] = sOffsetMeasure.sEC.Value;
           break;

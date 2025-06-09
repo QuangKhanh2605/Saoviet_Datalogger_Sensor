@@ -210,8 +210,12 @@ void       Init_IdSlave(void);
 
 void       AT_CMD_Get_State_Sensor(sData *str, uint16_t Pos);
 void       AT_CMD_Get_Measure_Value (sData *str_Receiv, uint16_t Pos);
+void       AT_CMD_Get_pH_Compensation(sData *str_Receiv, uint16_t Pos);
+void       AT_CMD_Set_pH_Compensation(sData *str_Receiv, uint16_t Pos);
 
 void       Init_Parameter_Sensor(void);
+void       Save_Const_pH_Compensation_Chlorine(uint16_t value);
+void       Init_Const_pH_Compensation_Chlorine(void);
 
 //void       Send_RS458_Normal(uint8_t *aData, uint16_t Length_u16);
 void       Init_UartRs485(void);

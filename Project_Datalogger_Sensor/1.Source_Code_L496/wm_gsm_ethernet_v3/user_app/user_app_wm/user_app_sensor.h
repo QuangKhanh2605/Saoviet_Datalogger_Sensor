@@ -65,6 +65,7 @@ void Save_TimeWarningSensor(uint8_t Duration);
 void Init_TimeWarningSensor(void);
 
 void Save_OffsetMeasure(uint8_t KindOffset, Struct_SS_Value sMeasure);
+void Save_OffsetMeasure_cmdAT(uint8_t KindOffset, Struct_SS_Value sValueMeasure);
 void Init_OffsetMeasure(void);
 
 void AT_CMD_Get_Time_Warning_Sensor(sData *str, uint16_t Pos);

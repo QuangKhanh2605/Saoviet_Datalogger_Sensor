@@ -45,6 +45,8 @@ Struct_Data_Sensor_Measure  sDataSensorMeasure = {0};
 
 int16_t aPH_ZERO_CALIB[2] = {700, 686};
 int16_t aPH_SLOPE_CALIB[5] = {168, 401, 918, 1010, 1245};
+
+int16_t Const_PH_Compensation_Chlorine = 0;
 /*========================Function Handle========================*/
 static uint8_t fevent_rs485_entry(uint8_t event)
 {
@@ -349,24 +351,37 @@ void Handle_State_SS_pH(uint8_t KindRecv, uint8_t KindDetect)
 
 /*==================Handle Sensor Clo===================*/
 
+float Const_PH_Compensation_Chlorine_f = 0;
+
 void Handle_Data_Trans_SS_Clo(sData *sFrame, uint8_t KindTrans)
 {
     uint8_t aData[4] = {0};
     float ph_Send_f = 0;
+    float ph_Send_f_stamp = 0;
     uint32_t ph_Send_u32 = 0;
     switch(KindTrans)
     {
         //Trans Opera
         case _RS485_SS_CLO_SEND_PH:
-            if(sDataSensorMeasure.spH_Water.Value > 500 && sDataSensorMeasure.spH_Water.Value < 900)
+            if(sDataSensorMeasure.spH_Water.Value > 500 && sDataSensorMeasure.spH_Water.Value < 1100)
                 ph_Send_f = Handle_int32_To_Float_Scale(sDataSensorMeasure.spH_Water.Value, 0xFE);
             else if(sDataSensorMeasure.spH_Water.Value == 0)
                 ph_Send_f = Handle_int32_To_Float_Scale(700, 0xFE);
             else if(sDataSensorMeasure.spH_Water.Value <= 500)
                 ph_Send_f = Handle_int32_To_Float_Scale(500, 0xFE);
             else
-                ph_Send_f = Handle_int32_To_Float_Scale(900, 0xFE);
+                ph_Send_f = Handle_int32_To_Float_Scale(1100, 0xFE);
             
+//            ph_Send_f = Handle_int32_To_Float_Scale(796, 0xFE); // Khong bu pH cho gia tri Clo du
+                   
+            Const_PH_Compensation_Chlorine_f = Handle_int32_To_Float_Scale(Const_PH_Compensation_Chlorine, 0xFE);
+            
+            if(ph_Send_f  > 7)
+            {
+                ph_Send_f_stamp = (ph_Send_f - 7)/2;
+                ph_Send_f = (ph_Send_f - 7)/(Const_PH_Compensation_Chlorine_f - ph_Send_f_stamp) + 7;
+            }
+
             ph_Send_u32 = Handle_Float_To_hexUint32(ph_Send_f);
             aData[0] = ph_Send_u32 >> 8;
             aData[1] = ph_Send_u32;
@@ -1403,7 +1418,75 @@ void AT_CMD_Get_Measure_Value (sData *str_Receiv, uint16_t Pos)
 
 	Modem_Respond(PortConfig, aTemp, length, 0);
 }
+
+void       AT_CMD_Get_pH_Compensation(sData *str_Receiv, uint16_t Pos)
+{
+    uint8_t aTemp[50] = "Const pH Compensation: ";   //13 ki tu dau tien
+    sData StrResp = {&aTemp[0], 23}; 
+
+    Convert_Point_Int_To_String_Scale (aTemp, &StrResp.Length_u16, (int)(Const_PH_Compensation_Chlorine), 0xFE);
+
+	Modem_Respond(PortConfig, StrResp.Data_a8, StrResp.Length_u16, 0);
+}
+void       AT_CMD_Set_pH_Compensation(sData *str_Receiv, uint16_t Pos)
+{
+    uint32_t TempU32 = 0;
+    if( str_Receiv->Data_a8[0] >= '0' && str_Receiv->Data_a8[0] <= '9')
+    {
+        uint8_t length = 0;
+        for(uint8_t i = 0; i < str_Receiv->Length_u16; i++)
+        {
+            if( str_Receiv->Data_a8[i] < '0' || str_Receiv->Data_a8[i]>'9') break;
+            else length++;
+        }
+        TempU32 = Convert_String_To_Dec(str_Receiv->Data_a8 , length);
+        if(TempU32 <= 400 && TempU32 >= 200)
+        {
+            Save_Const_pH_Compensation_Chlorine(TempU32);
+            Modem_Respond(PortConfig, (uint8_t*)"OK", 2, 0);
+        }
+        else
+        {
+            Modem_Respond(PortConfig, (uint8_t*)"ERROR", 5, 0);
+        }
+    }
+    else
+    {
+        Modem_Respond(PortConfig, (uint8_t*)"ERROR", 5, 0);
+    }
+}
 #endif
+/*==================Save and Init Const pH compensation Chlorine===============*/
+void Save_Const_pH_Compensation_Chlorine(uint16_t value)
+{
+#ifdef USING_INTERNAL_MEM
+    uint8_t aData[8] = {0};
+    uint8_t length = 0;
+    
+    Const_PH_Compensation_Chlorine = value;
+    
+    aData[length++] = Const_PH_Compensation_Chlorine >> 8;
+    aData[length++] = Const_PH_Compensation_Chlorine;
+
+    Save_Array(ADDR_CONST_PH_COMPENSATION, aData, length);
+#endif
+}
+
+void Init_Const_pH_Compensation_Chlorine(void)
+{
+#ifdef USING_INTERNAL_MEM
+    if(*(__IO uint8_t*)(ADDR_CONST_PH_COMPENSATION) != FLASH_BYTE_EMPTY)
+    {
+        Const_PH_Compensation_Chlorine  = *(__IO uint8_t*)(ADDR_CONST_PH_COMPENSATION+2) <<8;
+        Const_PH_Compensation_Chlorine |= *(__IO uint8_t*)(ADDR_CONST_PH_COMPENSATION+3);
+    }
+    else
+    {
+        Const_PH_Compensation_Chlorine = 300;
+    }
+#endif    
+}
+
 /*==================Handle Task and Init app=================*/
 void Init_UartRs485(void)
 {
@@ -1417,10 +1500,14 @@ void       Init_AppRs485(void)
     Init_UartRs485();
     Init_IdSlave();
     Init_Parameter_Sensor();
+    Init_Const_pH_Compensation_Chlorine();
 #ifdef USING_AT_CONFIG
     /* regis cb serial */
     CheckList_AT_CONFIG[_GET_STATE_SENSOR].CallBack = AT_CMD_Get_State_Sensor;
     CheckList_AT_CONFIG[_GET_MEASURE_VALUE].CallBack = AT_CMD_Get_Measure_Value;
+    
+    CheckList_AT_CONFIG[_GET_PH_COMPENSATION].CallBack = AT_CMD_Get_pH_Compensation;
+    CheckList_AT_CONFIG[_SET_PH_COMPENSATION].CallBack = AT_CMD_Set_pH_Compensation;
 #endif
 }
 
