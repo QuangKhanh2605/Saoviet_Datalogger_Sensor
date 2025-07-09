@@ -57,13 +57,12 @@ typedef enum
     __RSSI,
     
     __PARAM_CM44,
-//    __SC1_ID_DCU,
+    __SC1_ID_DCU,
     __SC1_CLO_DU,
     __SC1_PH_WATER,
     __SC1_NTU,
     __SC1_SALINITY,
     __SC1_TEMP,
-    __SC1_EC,
     
     __CHANEL_1,
     __PULSE_1,
@@ -106,13 +105,7 @@ typedef enum
     __PASS_WORD_1,
     __PASS_WORD_2,
     
-    __PASS_CALIB_1,
-    __PASS_CALIB_2,
-    
     __SET_REQ_1,
-    __SET_CALIB_SENSOR,
-    __DEVICE_INFOR,
-    
     __SET_PULSE_SETT,
     __SET_RESTORE_PULSE,
     __SET_PRESSURE,
@@ -122,43 +115,6 @@ typedef enum
         
     __SET_REQ_2_1,
     __SET_REQ_2_2,
-    
-    __SET_CALIB_TITLE,
-    __SET_CALIB_SS_PH,
-    __SET_CALIB_SS_CLO,
-    __SET_CALIB_SS_EC,
-    __SET_CALIB_SS_TUR,
-    
-    __SET_PH_TITLE,
-    __SET_PH_Z_SOLUTION,
-    __SET_PH_ZERO,
-    __SET_PH_S_SOLUTION,
-    __SET_PH_SLOPE,
-    
-    __SET_CLO_TITLE,
-    __SET_CLO_SOLUTION,
-    __SET_CLO_ZERO,
-    __SET_CLO_SLOPE,
-    
-    __SET_EC_TITLE,
-    __SET_EC_CONST,
-    __SET_EC_CALIB,
-    
-    __SET_TUR_TITLE_1,
-    __SET_TUR_VALUE_P1,
-    __SET_TUR_AD_P1,
-    __SET_TUR_VALUE_P2,
-    __SET_TUR_AD_P2,
-    
-    __SET_TUR_TITLE_2,
-    __SET_TUR_VALUE_P3,
-    __SET_TUR_AD_P3,
-    __SET_TUR_VALUE_P4,
-    __SET_TUR_AD_P4,
-    
-    __SET_CALIB_STATE,
-    __INFOR_FW_VERSION_1,
-    __INFOR_FW_VERSION_2,
     
     __SET_PRESSURE_1_1,
     __SET_PRESSURE_1_2,
@@ -220,21 +176,9 @@ typedef enum
     _LCD_SCREEN_7b,
     _LCD_SCREEN_8,
     _LCD_SCR_PASS,
-    _LCD_SCR_PASSCALIB,
     _LCD_SCR_SETTING,
     _LCD_SCR_SETTING_2,
     _LCD_SCR_SET_FREQ,
-    
-    _LCD_SCR_SET_CALIB,
-    _LCD_SCR_SET_CALIB_SS_PH,
-    _LCD_SCR_SET_CALIB_SS_CLO,
-    _LCD_SCR_SET_CALIB_SS_EC,
-    _LCD_SCR_SET_CALIB_SS_TUR_TAB_1,
-    _LCD_SCR_SET_CALIB_SS_TUR_TAB_2,
-    
-    _LCD_SCR_SET_CALIB_STATE,
-    _LCD_SCR_INFORMATION,
-    
     _LCD_SCR_SET_PRESS_1,
     _LCD_SCR_SET_PRESS_1_2, 
     _LCD_SCR_SET_PRESS_2,
@@ -331,7 +275,6 @@ void    Display_Set_Screen (sScreenInformation *screen, uint8_t index, uint8_t s
 void    Display_Set_Screen_Flag (sScreenInformation *screen, void *pData, uint8_t flag);
 
 uint8_t Display_Check_Password (uint8_t *pPass);
-uint8_t Display_Check_PassCalib (uint8_t pPass[]);
 
 void    Display_Process_Down_Pressure_2 (sPressureLinearInter *pPress);
 void    Display_Process_Up_Pressure_2 (sPressureLinearInter *pPress);
@@ -339,8 +282,5 @@ void    Display_Process_Up_Pressure_2 (sPressureLinearInter *pPress);
 void    Display_Show_Static_Param (void);
 uint8_t Display_Show_Charge_Bat (uint8_t *level);
 
-void    Display_Show_State_Sensor_Network (uint8_t screen);
-void    Display_Show_State_Calib_Sensor (uint8_t screen);
-void    Display_Show_Confirm_Calib_Sensor (uint8_t screen);
 
 #endif

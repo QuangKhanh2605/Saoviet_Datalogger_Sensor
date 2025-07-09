@@ -120,12 +120,7 @@ HAL_StatusTypeDef OnchipFlashPageErase (uint32_t pageaddress)
     #if (FLASH_BYTE_WRTIE == 8)
         //If the previous operation is completed, proceed to erase the page
         if (status == HAL_OK)
-        {
-            if((pageaddress & 0x00FFFFFF)/2048 < 256)
-                FLASH_PageErase((pageaddress & 0x00FFFFFF)/2048, FLASH_BANK_1);
-            else
-                FLASH_PageErase((pageaddress & 0x00FFFFFF)/2048, FLASH_BANK_2);
-        }
+            FLASH_PageErase((pageaddress & 0x00FFFFFF)/2048, FLASH_BANK_1);
 
         //Wait for last operation to be completed
         status = FLASH_WaitForLastOperation(1000);

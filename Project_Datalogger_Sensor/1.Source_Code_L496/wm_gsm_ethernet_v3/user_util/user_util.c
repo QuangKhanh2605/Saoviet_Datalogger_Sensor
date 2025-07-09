@@ -599,5 +599,34 @@ void Scale_String_Dec (sData *StrDec, uint8_t Scale)
 }
 
 //------------------------Convert uint32Hex To Float------------------------
+/*
+    @brief  Convert uint32Hex To Float
+*/
+void Convert_uint32Hex_To_Float(uint32_t uint32Hex, float *Var)
+{
+    float stamp = 0;
+    uint8_t check_bit = 0;
+    int8_t stamp_Sign = 1;
+    uint8_t stamp_Exponent = 0;
+    float   stamp_Mantissa = 1;
+    for(uint8_t i = 0; i<32; i++)
+    {
+        check_bit = 0x01 & (uint32Hex>>i);
+        if(i<23)
+        {
+            stamp_Mantissa += check_bit * pow(2, (-1)*(23-i));
+        }
+        else if(i<31)
+        {
+            stamp_Exponent +=  check_bit * pow(2, i-23);
+        }
+        else
+        {
+            if(check_bit == 1)  stamp_Sign = -1;
+        }
+    }
+    stamp = stamp_Sign * pow(2, stamp_Exponent -127)*stamp_Mantissa;
+    *Var = stamp;
+}
     
     

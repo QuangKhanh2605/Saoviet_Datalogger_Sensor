@@ -29,24 +29,6 @@
 #endif 
 
 /* 
-    - Using lib app water meter
-    #define INC_APP_WM_FEATURE
-*/
-#define INC_APP_RS485
-#ifdef INC_APP_RS485
-    #include "user_app_rs485.h"
-#endif 
-
-/* 
-    - Using lib app water meter
-    #define INC_APP_WM_FEATURE
-*/
-#define INC_APP_SENSOR
-#ifdef INC_APP_SENSOR
-    #include "user_app_sensor.h"
-#endif 
-
-/* 
     - Using lib app Emeter
     #define INC_APP_EMET_FEATURE 
 */
@@ -129,7 +111,7 @@
 #define MAX_MESS_IN_PACKET                              1       //1 ban tin 31 byte. Max 512 byte - 45 byte header
 
 /*--- ID cua thiet bi -------*/
-#define DEVICE_ID                                       "SVWMDL25009999"   //"SVWMGE24002222"  // "SVLEV230000001"   // "SVWMGC23000001"  
+#define DEVICE_ID                                       "SVWMDL24129999"   //"SVWMGE24002222"  // "SVLEV230000001"   // "SVWMGC23000001"  
 
 #define DEFAULT_FREQ_SEND_ONLINE                        5
 

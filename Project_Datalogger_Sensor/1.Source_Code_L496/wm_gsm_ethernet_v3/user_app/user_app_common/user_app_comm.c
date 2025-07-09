@@ -68,7 +68,7 @@ char aSaoVietCom[15][71] =
 };
 
 
-sData   sFirmVersion = {(uint8_t *) "SVTH_SVM_DLS_V1_2_1", 19}; 
+sData   sFirmVersion = {(uint8_t *) "SVTH_SVM_DLS_V1_1_1", 19}; 
 
 static UTIL_TIMER_Object_t TimerTx;
 
@@ -456,14 +456,6 @@ void SysApp_Setting (void)
     AppWm_Init();
 #endif
     
-#ifdef USING_APP_RS485
-    Init_AppRs485();
-#endif
-    
-#ifdef USING_APP_SENSOR
-    Init_AppSensor();
-#endif
-    
 #ifdef USING_APP_TEMH
     AppTemH_Init();
 #endif
@@ -478,7 +470,7 @@ void SysApp_Setting (void)
     
     //Dang ki cac event
 	UTIL_TIMER_Create(&TimerTx,  0xFFFFFFFFU, UTIL_TIMER_ONESHOT, _Cb_TX_Timer_Event, NULL);
-	UTIL_TIMER_SetPeriod (&TimerTx, 60000*4);   //Set sFreqInfor.UnitMin_u16 * 60000
+	UTIL_TIMER_SetPeriod (&TimerTx, 20000);   //Set sFreqInfor.UnitMin_u16 * 60000
 	UTIL_TIMER_Start (&TimerTx);
 }
 
@@ -547,14 +539,6 @@ void Main_Task (void)
             
     #ifdef USING_APP_WM
         TaskStatus_u8 |= AppWm_Task(); 
-    #endif
-        
-    #ifdef USING_APP_RS485
-        TaskStatus_u8 |= AppRs485_Task(); 
-    #endif
-        
-    #ifdef USING_APP_SENSOR
-        TaskStatus_u8 |= AppSensor_Task(); 
     #endif
         
     #ifdef USING_APP_EMET

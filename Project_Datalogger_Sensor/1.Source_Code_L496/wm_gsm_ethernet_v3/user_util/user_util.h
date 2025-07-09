@@ -213,4 +213,5 @@ uint8_t     UTIL_Get_Scale (uint32_t val);
 
 void        Convert_Uint64_To_StringDec (sData *Payload, uint64_t Data, uint8_t Scale);
 void        Scale_String_Dec (sData *StrDec, uint8_t Scale);
+void        Convert_uint32Hex_To_Float(uint32_t uint32Hex, float *Var);
 #endif

@@ -97,27 +97,9 @@ typedef enum
     
     _SET_MODBUS_INFOR,
     _QUERY_MODBUS_INFOR,
-
+    
     _SET_PRESS_INFOR,
     _QUERY_PRESS_INFOR,
-    
-    _GET_STATE_SENSOR,
-    _GET_MEASURE_VALUE,
-    
-    _GET_FREQ_WARNING_SENSOR,
-    _SET_FREQ_WARNING_SENSOR,
-    
-    _GET_OFFSET_CLO,
-    _SET_OFFSET_CLO,
-    
-    _GET_OFFSET_PH,
-    _SET_OFFSET_PH,
-    
-    _GET_OFFSET_NTU,
-    _SET_OFFSET_NTU,
-    
-    _GET_PH_COMPENSATION,
-    _SET_PH_COMPENSATION,
     
     _END_AT_CMD,
 }Type_Command_AT_PC;

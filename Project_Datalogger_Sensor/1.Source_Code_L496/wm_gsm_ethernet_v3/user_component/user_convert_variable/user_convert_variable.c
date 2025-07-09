@@ -317,27 +317,4 @@ void Convert_uint32Hex_To_Float(uint32_t uint32Hex, float *Var)
     *Var = stamp;
 }
 
-uint32_t Convert_String_To_Dec(uint8_t *pData, uint8_t lenData)
-{
-    uint8_t     index = 0;
-    uint8_t     tempData = 0;
-    uint32_t    reVal = 0;
-
-    for (index = 0; index < lenData; index++)
-    {
-        if (('0' <= *(pData + index)) && (*(pData + index) <= '9'))
-        {
-            tempData = (*(pData + index) - 0x30);
-        } else
-            tempData = 0;
-        
-        if (index == 0)
-            reVal = tempData;
-        else
-            reVal = (reVal * 10) + tempData;
-    }
-
-    return reVal;
-}
-
 

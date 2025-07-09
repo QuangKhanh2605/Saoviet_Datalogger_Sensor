@@ -16,7 +16,6 @@
 #include "user_app_comm.h"
 #include "user_modbus_rtu.h"
 #include "user_define.h"
-#include "user_convert_variable.h"
 /*================ Define =================*/
 static uint8_t     _Cb_Entry_Wm (uint8_t event);
 static uint8_t     _Cb_Log_TSVH (uint8_t event);
@@ -50,7 +49,7 @@ sEvent_struct sEventAppWM [] =
     { _EVENT_SCAN_ALARM,	    1, 0, 1000,     _Cb_Scan_Alarm }, 
     { _EVENT_CONTROL_LED1,		1, 0, 200,      _Cb_Control_Led1 }, 
     
-    { _EVENT_RS485_MODBUS,		0, 0, 500,      _Cb_Read_RS485_Modbus }, 
+    { _EVENT_RS485_MODBUS,		1, 0, 500,      _Cb_Read_RS485_Modbus }, 
     { _EVENT_RS485_2_MODBUS,    1, 0, 500,      _Cb_Read_RS485_2_Modbus }, 
     
     { _EVENT_POWER_UP_12V,      0, 0, 100,      _Cb_Power_Up_12V },
@@ -110,6 +109,7 @@ extern sData sUart485_2;
 
 static uint8_t PressureKey_u8 = 0xFF;
 
+Struct_Data_Sensor_Measure  sDataSensorMeasure = {0};
 /*================ Struct =================*/
 
 
@@ -202,7 +202,7 @@ uint8_t AppWm_Task(void)
 static uint8_t _Cb_Entry_Wm (uint8_t event)
 {
     fevent_active(sEventAppWM, _EVENT_MEAS_PRESSURE); 
-//    fevent_active(sEventAppWM, _EVENT_RS485_MODBUS);
+    fevent_active(sEventAppWM, _EVENT_RS485_MODBUS);
     fevent_active(sEventAppWM, _EVENT_RS485_2_MODBUS);
     fevent_active(sEventAppWM, _EVENT_GET_CONTACT_IN); 
     
@@ -752,11 +752,11 @@ static uint8_t _Cb_Read_RS485_Modbus (uint8_t event)
         
         if(sDataSensorMeasure.CountDisconnectRS485_1 >=3 && sDataSensorMeasure.CountDisconnectRS485_2 >=3)
         {
-            sDataSensorMeasure.sClo_Du.Value   = 0;
-            sDataSensorMeasure.spH_Water.Value = 0;
-            sDataSensorMeasure.sNTU.Value      = 0;
-            sDataSensorMeasure.sSalinity.Value = 0;
-            sDataSensorMeasure.sTemperature.Value = 0;
+            sDataSensorMeasure.Clo_Du   = 0;
+            sDataSensorMeasure.pH_Water = 0;
+            sDataSensorMeasure.NTU      = 0;
+            sDataSensorMeasure.Salinity = 0;
+            sDataSensorMeasure.Temperature = 0;
         }
     }
     
@@ -771,7 +771,7 @@ static uint8_t _Cb_Read_RS485_Modbus (uint8_t event)
             V_PIN_OFF;   //off Power
             RS485_OFF;   //Off 485 de go to sleep mode
         } else {
-            sEventAppWM[event].e_period = 1000;
+            sEventAppWM[event].e_period = 10000;
             fevent_enable(sEventAppWM, event);
         }
     }
@@ -893,11 +893,11 @@ static uint8_t _Cb_Read_RS485_2_Modbus (uint8_t event)
         if(sDataSensorMeasure.CountDisconnectRS485_1 >=3 && sDataSensorMeasure.CountDisconnectRS485_2 >=3)
         {
             
-            sDataSensorMeasure.sClo_Du.Value   = 0;
-            sDataSensorMeasure.spH_Water.Value = 0;
-            sDataSensorMeasure.sNTU.Value      = 0;
-            sDataSensorMeasure.sSalinity.Value = 0;
-            sDataSensorMeasure.sTemperature.Value = 0;
+            sDataSensorMeasure.Clo_Du   = 0;
+            sDataSensorMeasure.pH_Water = 0;
+            sDataSensorMeasure.NTU      = 0;
+            sDataSensorMeasure.Salinity = 0;
+            sDataSensorMeasure.Temperature = 0;
         }
     }
     
@@ -2276,7 +2276,7 @@ uint8_t AppWm_UnMark_Init_Pulse (void)
 
 static void OnTimerLevelPowerOn(void *context)
 {
-//	fevent_active(sEventAppWM, _EVENT_RS485_MODBUS);
+	fevent_active(sEventAppWM, _EVENT_RS485_MODBUS);
 }
 
 static void OnTimerRs485_2(void *context)
@@ -3243,28 +3243,20 @@ uint8_t SensorRS485_Packet_TSVH (uint8_t *pData)
 //    AppCtrlOxy_Packet_Data(pData, &length, OBIS_STATE_PUMP_PH, &sParamCtrlPH.StateCtrl, 1, 0xAA);
        
         //----------  Clo_Du ------
-        if(sDataSensorMeasure.State_Recv_Clo == 1)
-            SensorRS485_Packet_Data(pData, &length, OBIS_ENVI_CLO_DU, &sDataSensorMeasure.sClo_Du.Value, 2, sDataSensorMeasure.sClo_Du.Scale);
+        SensorRS485_Packet_Data(pData, &length, OBIS_ENVI_CLO_DU, &sDataSensorMeasure.Clo_Du, 2, 0xFE);
         
         //----------  pH ------
-        if(sDataSensorMeasure.State_Recv_pH == 1)
-            SensorRS485_Packet_Data(pData, &length, OBIS_ENVI_PH_WATER, &sDataSensorMeasure.spH_Water.Value, 2, sDataSensorMeasure.spH_Water.Scale);
+        SensorRS485_Packet_Data(pData, &length, OBIS_ENVI_PH_WATER, &sDataSensorMeasure.pH_Water, 2, 0xFE);
         
         //----------  Do Duc------
-        if(sDataSensorMeasure.State_Recv_NTU == 1)
-            SensorRS485_Packet_Data(pData, &length, OBIS_ENVI_NTU, &sDataSensorMeasure.sNTU.Value, 2, sDataSensorMeasure.sNTU.Scale);
+        SensorRS485_Packet_Data(pData, &length, OBIS_ENVI_NTU, &sDataSensorMeasure.NTU, 2, 0xFF);
         
         //----------  SALINITY %------
-        if(sDataSensorMeasure.State_Recv_Salinity == 1)
-            SensorRS485_Packet_Data(pData, &length, OBIS_ENVI_SALINITY_UNIT, &sDataSensorMeasure.sSalinity.Value, 2, sDataSensorMeasure.sSalinity.Scale);
+        SensorRS485_Packet_Data(pData, &length, OBIS_ENVI_SALINITY_UNIT, &sDataSensorMeasure.Salinity, 2, 0xFE);
         
         //----------  Temperature ------
-        if(sDataSensorMeasure.State_Recv_Temperature == 1)
-            SensorRS485_Packet_Data(pData, &length, OBIS_ENVI_OXY_TEMPERATURE, &sDataSensorMeasure.sTemperature.Value, 2, sDataSensorMeasure.sTemperature.Scale);
+        SensorRS485_Packet_Data(pData, &length, OBIS_ENVI_OXY_TEMPERATURE, &sDataSensorMeasure.Temperature, 2, 0xFE);
         
-        //----------  EC ------
-        if(sDataSensorMeasure.State_Recv_EC == 1)
-            SensorRS485_Packet_Data(pData, &length, OBIS_ENVI_EC, &sDataSensorMeasure.sEC.Value, 2, sDataSensorMeasure.sEC.Scale);
     
     //----------Tan suat--------------------
     SV_Protocol_Packet_Data(pData, &length, OBIS_RSSI_1, &sSimCommInfor.RSSI_u8, 1, 0x00);
@@ -3301,7 +3293,6 @@ void SensorRS485_Packet_Data (uint8_t *pTarget, uint16_t *LenTarget, uint8_t Obi
         case OBIS_ENVI_OXY_MG_L:
         case OBIS_ENVI_OXY_PERCENT:
         case OBIS_ENVI_OXY_TEMPERATURE:
-        case OBIS_ENVI_EC:
         case OBIS_ENVI_SALINITY:
 //        case OBIS_ENVI_ID_SERVER:
         case OBIS_ENVI_PH_WATER:
@@ -3449,11 +3440,11 @@ void Handle_Data_CM44(uint32_t u32_Clo_Du, uint32_t u32_pH_Water, uint32_t u32_N
       if(stamp_div >= 5) f_Temperature -= 0.01;
     }
     
-    sDataSensorMeasure.sClo_Du.Value = (uint16_t)(f_Clo_Du*100);
-    sDataSensorMeasure.spH_Water.Value = (uint16_t)(f_pH_Water*100);
-    sDataSensorMeasure.sNTU.Value = (uint16_t)(f_NTU*10);
-    sDataSensorMeasure.sSalinity.Value = (uint16_t)(f_Salinity*100);
-    sDataSensorMeasure.sTemperature.Value = (uint16_t)(f_Temperature*100);
+    sDataSensorMeasure.Clo_Du = (uint16_t)(f_Clo_Du*100);
+    sDataSensorMeasure.pH_Water = (uint16_t)(f_pH_Water*100);
+    sDataSensorMeasure.NTU = (uint16_t)(f_NTU*10);
+    sDataSensorMeasure.Salinity = (uint16_t)(f_Salinity*100);
+    sDataSensorMeasure.Temperature = (uint16_t)(f_Temperature*100);
 }
 
 

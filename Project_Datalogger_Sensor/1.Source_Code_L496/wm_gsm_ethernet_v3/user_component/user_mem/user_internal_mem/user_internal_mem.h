@@ -157,12 +157,6 @@
     #define ADDR_DCUID         			0x0807F000      
     
     #define ADDR_FLAG_HAVE_NEW_FW       0x0807F800
-    
-    #define ADDR_TIME_WARNING_SENSOR    0x08080000
-    
-    #define ADDR_CONST_PH_COMPENSATION  0x08080800    
-
-    #define ADDR_OFFSET_MEASURE         0x0808F000
 
     #define	FLASH_MAX_MESS_TSVH_SAVE	180
     #define	FLASH_MAX_MESS_EVENT_SAVE   16

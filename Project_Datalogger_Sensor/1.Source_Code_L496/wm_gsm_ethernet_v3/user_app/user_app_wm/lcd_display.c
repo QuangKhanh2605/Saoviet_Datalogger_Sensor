@@ -40,13 +40,6 @@ char aUnitWm[5][10] =
 char AnalogType[2][10] = { "pressure", "level"};
 
 uint8_t aPASSWORD[4] = {"1111"};
-uint8_t aPASSCALIB[4] = {"2605"};
-
-uint8_t aSTT_CALIB_FREE[14]   = {"              "};
-uint8_t aSTT_CALIB_ENTER[14]  = {"Enter to Calib"};
-uint8_t aSTT_CALIB_WAIT[14]   = {"    Waiting   "};
-uint8_t aSTT_CALIB_DONE[14]   = {"     Done    "};
-uint8_t aSTT_CALIB_ERROR[14]  = {"     Error   "};
 
 sOjectInformation   sLCDObject[] = 
 {
@@ -58,14 +51,14 @@ sOjectInformation   sLCDObject[] =
     {   __FREQ,             "Tsend: ",          NULL,   _DTYPE_U16,      0,      " (min)",  5,  0,  0x00,    _LCD_SCREEN_1    },
     {   __RSSI,             "Rssi:  -",         NULL,   _DTYPE_U8,       0,      " (dbm)",  6,  0,  0x00,    _LCD_SCREEN_1    },
     
-    {   __PARAM_CM44,       "Sensor.",            NULL,   _DTYPE_STRING,   0,      NULL,      0,  0,  0x00,    _LCD_SCREEN_CM44    },
-//    {   __SC1_ID_DCU,       NULL,               NULL,   _DTYPE_STRING,   0,      NULL,      2,  20, 0x00,    _LCD_SCREEN_CM44    },
-    {   __SC1_CLO_DU,       "CLO DU: ",         NULL,   _DTYPE_I16,      0xFE,   "  mg/L",  2,  0,  0x00,    _LCD_SCREEN_CM44    },
-    {   __SC1_PH_WATER,     "PH ATC: ",         NULL,   _DTYPE_I16,      0xFE,   "  pH",    3,  0,  0x00,    _LCD_SCREEN_CM44    },
-    {   __SC1_NTU,          "NTU   : ",         NULL,   _DTYPE_I16,      0xFE,   "  NTU",   4,  0,  0x00,    _LCD_SCREEN_CM44    },
-    {   __SC1_SALINITY,     "Do man: ",         NULL,   _DTYPE_I16,      0xFE,   "  %",     5,  0,  0x00,    _LCD_SCREEN_CM44    },
-    {   __SC1_TEMP,         "Temp  : ",         NULL,   _DTYPE_I16,      0xFE,   "  ‰C",    6,  0,  0x00,    _LCD_SCREEN_CM44    },
-    {   __SC1_EC,           "EC    : ",         NULL,   _DTYPE_I16,      0xFE,   "  uS/cm", 7,  0,  0x00,    _LCD_SCREEN_CM44    },
+    {   __PARAM_CM44,       "CM44x.",            NULL,   _DTYPE_STRING,   0,      NULL,      0,  0,  0x00,    _LCD_SCREEN_CM44    },
+    {   __SC1_ID_DCU,       NULL,               NULL,   _DTYPE_STRING,   0,      NULL,      2,  20, 0x00,    _LCD_SCREEN_CM44    },
+    {   __SC1_CLO_DU,       "CLO DU: ",         NULL,   _DTYPE_I16,      0xFE,   "   mg/L",  3,  0,  0x00,    _LCD_SCREEN_CM44    },
+    {   __SC1_PH_WATER,     "PH ATC: ",         NULL,   _DTYPE_I16,      0xFE,   "   pH",    4,  0,  0x00,    _LCD_SCREEN_CM44    },
+    {   __SC1_NTU,          "NTU   : ",         NULL,   _DTYPE_I16,      0xFF,   "    NTU",   5,  0,  0x00,    _LCD_SCREEN_CM44    },
+    {   __SC1_SALINITY,     "Do man: ",         NULL,   _DTYPE_I16,      0xFE,   "   %",     6,  0,  0x00,    _LCD_SCREEN_CM44    },
+    {   __SC1_TEMP,         "Temp  : ",         NULL,   _DTYPE_I16,      0xFE,   "   ‰C",   7,  0,  0x00,    _LCD_SCREEN_CM44    },
+    
     //screen channel 1
 
     {   __CHANEL_1,         "CH.1  ",           NULL,   _DTYPE_STRING,   0,      NULL,      0,  0,  0x00,    _LCD_SCREEN_2    },
@@ -109,13 +102,7 @@ sOjectInformation   sLCDObject[] =
     {   __PASS_WORD_1,      "Enter Password",   NULL,   _DTYPE_STRING,   0,      NULL,      2,  24, 0x00,    _LCD_SCR_PASS    },
     {   __PASS_WORD_2,      NULL,               NULL,   _DTYPE_STRING,   0,      NULL,      3,  48, 0x00,    _LCD_SCR_PASS    },
     
-    {   __PASS_CALIB_1,     "Enter Passcalib",  NULL,   _DTYPE_STRING,   0,      NULL,      2,  24, 0x00,    _LCD_SCR_PASSCALIB},
-    {   __PASS_CALIB_2,     NULL,               NULL,   _DTYPE_STRING,   0,      NULL,      3,  54, 0x00,    _LCD_SCR_PASSCALIB},
-    
-    {   __SET_REQ_1,        "1.Tsend Data",     NULL,   _DTYPE_STRING,   0,      NULL,      2,  14, 0x00,    _LCD_SCR_SETTING },
-    {   __SET_CALIB_SENSOR, "2.Calib Sensor",   NULL,   _DTYPE_STRING,   0,      NULL,      3,  14, 0x00,    _LCD_SCR_SETTING },
-    {   __DEVICE_INFOR,     "3.Information",    NULL,   _DTYPE_STRING,   0,      NULL,      4,  14, 0x00,    _LCD_SCR_SETTING },
-    
+    {   __SET_REQ_1,        "1.Tsend Data",     NULL,   _DTYPE_STRING,   0,      NULL,      2,  24, 0x00,    _LCD_SCR_SETTING },
     {   __SET_PULSE_SETT,   NULL,  NULL,   _DTYPE_STRING,   0,      NULL,      2,  24, 0x00,    _LCD_SCR_SETTING },
     {   __SET_RESTORE_PULSE,NULL,  NULL,   _DTYPE_STRING,   0,      NULL,      3,  24, 0x00,    _LCD_SCR_SETTING },
     {   __SET_PRESSURE,     NULL,   NULL,   _DTYPE_STRING,   0,      NULL,      4,  24, 0x00,    _LCD_SCR_SETTING },
@@ -125,44 +112,6 @@ sOjectInformation   sLCDObject[] =
     
     {   __SET_REQ_2_1,      "*Tsend Data:",     NULL,   _DTYPE_STRING,   0,      NULL,      2,  24, 0x00,    _LCD_SCR_SET_FREQ },
     {   __SET_REQ_2_2,      NULL,               NULL,   _DTYPE_U32,      0,      " (min)",  3,  36, 0x02,    _LCD_SCR_SET_FREQ },
-    
-    {   __SET_CALIB_TITLE,  "Calib Sensor",     NULL,   _DTYPE_STRING,   0,     NULL,       2,  30, 0x00,    _LCD_SCR_SET_CALIB},
-    {   __SET_CALIB_SS_PH,  "1.pH",             NULL,   _DTYPE_STRING,   0,     NULL,       3,  14, 0x00,    _LCD_SCR_SET_CALIB},
-    {   __SET_CALIB_SS_CLO, "2.Chlorine",       NULL,   _DTYPE_STRING,   0,     NULL,       4,  14, 0x00,    _LCD_SCR_SET_CALIB},
-    {   __SET_CALIB_SS_EC,  "3.EC",             NULL,   _DTYPE_STRING,   0,     NULL,       5,  14, 0x00,    _LCD_SCR_SET_CALIB},
-    {   __SET_CALIB_SS_TUR, "4.Turbididy",      NULL,   _DTYPE_STRING,   0,     NULL,       6,  14, 0x00,    _LCD_SCR_SET_CALIB},
-    
-    {   __SET_PH_TITLE,     "pH         AD: ",  NULL,   _DTYPE_U32,      0x00,  NULL,       2,  5,  0x00,    _LCD_SCR_SET_CALIB_SS_PH},
-    {   __SET_PH_Z_SOLUTION,"1.Z_Solution: ",   NULL,   _DTYPE_I16,      0xFE,  NULL,       3,  14, 0x00,    _LCD_SCR_SET_CALIB_SS_PH},
-    {   __SET_PH_ZERO,      "2.Zero",           NULL,   _DTYPE_STRING,   0,     NULL,       4,  14, 0x00,    _LCD_SCR_SET_CALIB_SS_PH},
-    {   __SET_PH_S_SOLUTION,"3.S_Solution: ",   NULL,   _DTYPE_I16,      0xFE,  NULL,       5,  14, 0x00,    _LCD_SCR_SET_CALIB_SS_PH},
-    {   __SET_PH_SLOPE,     "4.Slope",          NULL,   _DTYPE_STRING,   0,     NULL,       6,  14, 0x00,    _LCD_SCR_SET_CALIB_SS_PH},
-    
-    {   __SET_CLO_TITLE,    "Chlorine   AD: ",  NULL,   _DTYPE_U32,      0x00,  NULL,       2,  5,  0x00,    _LCD_SCR_SET_CALIB_SS_CLO},
-    {   __SET_CLO_SOLUTION, "1.Solution: ",     NULL,   _DTYPE_I16,      0xFE,  NULL,       3,  14, 0x00,    _LCD_SCR_SET_CALIB_SS_CLO},
-    {   __SET_CLO_ZERO,     "2.Zero",           NULL,   _DTYPE_STRING,   0,     NULL,       4,  14, 0x00,    _LCD_SCR_SET_CALIB_SS_CLO},
-    {   __SET_CLO_SLOPE,    "3.Slope",          NULL,   _DTYPE_STRING,   0,     NULL,       5,  14, 0x00,    _LCD_SCR_SET_CALIB_SS_CLO},
-    
-    {   __SET_EC_TITLE,     "EC         AD: ",  NULL,   _DTYPE_I16,      0x00,  NULL,       2,  5,  0x00,    _LCD_SCR_SET_CALIB_SS_EC},
-    {   __SET_EC_CONST,     "1.Const: ",        NULL,   _DTYPE_I16,      0x00,  NULL,       3,  14, 0x00,    _LCD_SCR_SET_CALIB_SS_EC},
-    {   __SET_EC_CALIB,     "2.Calib: ",        NULL,   _DTYPE_I16,      0x00,  NULL,       4,  14, 0x00,    _LCD_SCR_SET_CALIB_SS_EC},
-    
-    {   __SET_TUR_TITLE_1,  "Tur    AD:",       NULL,   _DTYPE_U32,      0x00,  NULL,       2,  5,  0x00,    _LCD_SCR_SET_CALIB_SS_TUR_TAB_1},
-    {   __SET_TUR_VALUE_P1, "1.1st NTU: ",      NULL,   _DTYPE_I16,      0xFE,  NULL,       3,  14, 0x00,    _LCD_SCR_SET_CALIB_SS_TUR_TAB_1},
-    {   __SET_TUR_AD_P1,    "2.1st AD : ",      NULL,   _DTYPE_U32,      0x00,  NULL,       4,  14, 0x00,    _LCD_SCR_SET_CALIB_SS_TUR_TAB_1},
-    {   __SET_TUR_VALUE_P2, "3.2nd NTU: ",      NULL,   _DTYPE_I16,      0xFE,  NULL,       5,  14, 0x00,    _LCD_SCR_SET_CALIB_SS_TUR_TAB_1},
-    {   __SET_TUR_AD_P2,    "4.2nd AD : ",      NULL,   _DTYPE_U32,      0x00,  NULL,       6,  14, 0x00,    _LCD_SCR_SET_CALIB_SS_TUR_TAB_1},
-    
-    {   __SET_TUR_TITLE_2,  "Tur    AD:",       NULL,   _DTYPE_U32,      0x00,  NULL,       2,  5, 0x00,    _LCD_SCR_SET_CALIB_SS_TUR_TAB_2},
-    {   __SET_TUR_VALUE_P3, "5.3rd NTU: ",      NULL,   _DTYPE_I16,      0xFE,  NULL,       3,  14, 0x00,    _LCD_SCR_SET_CALIB_SS_TUR_TAB_2},
-    {   __SET_TUR_AD_P3,    "6.3rd AD : ",      NULL,   _DTYPE_U32,      0x00,  NULL,       4,  14, 0x00,    _LCD_SCR_SET_CALIB_SS_TUR_TAB_2},
-    {   __SET_TUR_VALUE_P4, "7.4th NTU: ",      NULL,   _DTYPE_I16,      0xFE,  NULL,       5,  14, 0x00,    _LCD_SCR_SET_CALIB_SS_TUR_TAB_2},
-    {   __SET_TUR_AD_P4,    "8.4th AD : ",      NULL,   _DTYPE_U32,      0x00,  NULL,       6,  14, 0x00,    _LCD_SCR_SET_CALIB_SS_TUR_TAB_2},
-    
-    {   __SET_CALIB_STATE,  NULL,               NULL,   _DTYPE_STRING,   0,     NULL,       3,  24, 0x00,    _LCD_SCR_SET_CALIB_STATE},
-    
-    {   __INFOR_FW_VERSION_1,"*Version",        NULL,   _DTYPE_STRING,   0,     NULL,      2,  24, 0x00,     _LCD_SCR_INFORMATION },
-    {   __INFOR_FW_VERSION_2, NULL,             NULL,   _DTYPE_STRING,   0,     NULL,      3,  5,  0x00,     _LCD_SCR_INFORMATION },
     
     {   __SET_PRESSURE_1_1, "1.Pressure CH.1",  NULL,   _DTYPE_STRING,   0,      NULL,      1,  24, 0x00,    _LCD_SCR_SET_PRESS_1 },
     {   __SET_PRESSURE_1_2, "2.Pressure CH.2",  NULL,   _DTYPE_STRING,   0,      NULL,      2,  24, 0x00,    _LCD_SCR_SET_PRESS_1 },
@@ -232,54 +181,12 @@ void Display_Init (void)
     sLCDObject[__RSSI].pData    = &sSimCommInfor.RSSI_u8;   
     sLCDObject[__FREQ].pData    = &sModemInfor.sFrequence.DurOnline_u32;    
     
-//    sLCDObject[__SC1_ID_DCU].pData      = sModemInfor.sId.Data_a8;
-    sLCDObject[__SC1_CLO_DU].pData      = &sDataSensorMeasure.sClo_Du.Value; 
-    sLCDObject[__SC1_CLO_DU].Scale_u8   = sDataSensorMeasure.sClo_Du.Scale; 
-    sLCDObject[__SC1_PH_WATER].pData    = &sDataSensorMeasure.spH_Water.Value;    
-    sLCDObject[__SC1_PH_WATER].Scale_u8 = sDataSensorMeasure.spH_Water.Scale;    
-    sLCDObject[__SC1_NTU].pData         = &sDataSensorMeasure.sNTU.Value;   
-    sLCDObject[__SC1_NTU].Scale_u8      = sDataSensorMeasure.sNTU.Scale;   
-    sLCDObject[__SC1_SALINITY].pData    = &sDataSensorMeasure.sSalinity.Value;    
-    sLCDObject[__SC1_SALINITY].Scale_u8 = sDataSensorMeasure.sSalinity.Scale; 
-    sLCDObject[__SC1_TEMP].pData        = &sDataSensorMeasure.sTemperature.Value;    
-    sLCDObject[__SC1_TEMP].Scale_u8     = sDataSensorMeasure.sTemperature.Scale;   
-    sLCDObject[__SC1_EC].pData          = &sDataSensorMeasure.sEC.Value;   
-    sLCDObject[__SC1_EC].Scale_u8       = sDataSensorMeasure.sEC.Scale;   
-    
-    sLCDObject[__SET_PH_TITLE].pData        = &sSensor_pH.Measure_AD; 
-    sLCDObject[__SET_PH_Z_SOLUTION].pData   = &sSensor_pH.sZero_Calib.Value ; 
-    sLCDObject[__SET_PH_ZERO].Scale_u8      = sSensor_pH.sZero_Calib.Scale; 
-    sLCDObject[__SET_PH_S_SOLUTION].pData   = &sSensor_pH.sSlope_Calib.Value; 
-    sLCDObject[__SET_PH_SLOPE].Scale_u8     = sSensor_pH.sSlope_Calib.Scale; 
-    
-    sLCDObject[__SET_CLO_TITLE].pData    = &sSensor_Clo.Measure_AD; 
-    sLCDObject[__SET_CLO_SOLUTION].pData = &sSensor_Clo.sSolution_Calibration.Value; 
-    sLCDObject[__SET_CLO_SOLUTION].Scale_u8 = sSensor_Clo.sSolution_Calibration.Scale; 
-    
-    sLCDObject[__SET_EC_TITLE].pData     = &sSensor_EC.sConductivity_Value.Value;
-    sLCDObject[__SET_EC_TITLE].Scale_u8  = sSensor_EC.sConductivity_Value.Scale;
-    sLCDObject[__SET_EC_CONST].pData     = &sSensor_EC.sConductivity_Const.Value;
-    sLCDObject[__SET_EC_CONST].Scale_u8  = sSensor_EC.sConductivity_Const.Scale;
-    sLCDObject[__SET_EC_CALIB].pData     = &sSensor_EC.sConductivity_Calib.Value;
-    sLCDObject[__SET_EC_CALIB].Scale_u8  = sSensor_EC.sConductivity_Calib.Scale;
-    
-    sLCDObject[__SET_TUR_TITLE_1].pData      = &sSensor_Turbidity.Measure_AD;
-    sLCDObject[__SET_TUR_VALUE_P1].pData     = &sSensor_Turbidity.sFirst_Calibration.Value;
-    sLCDObject[__SET_TUR_VALUE_P1].Scale_u8  = sSensor_Turbidity.sFirst_Calibration.Scale;
-    sLCDObject[__SET_TUR_AD_P1].pData        = &sSensor_Turbidity.First_AD_u32;
-    sLCDObject[__SET_TUR_VALUE_P2].pData     = &sSensor_Turbidity.sSecond_Calibration.Value;
-    sLCDObject[__SET_TUR_VALUE_P2].Scale_u8  = sSensor_Turbidity.sSecond_Calibration.Scale;
-    sLCDObject[__SET_TUR_AD_P2].pData        = &sSensor_Turbidity.Second_AD_u32;
-    
-    sLCDObject[__SET_TUR_TITLE_2].pData      = &sSensor_Turbidity.Measure_AD;
-    sLCDObject[__SET_TUR_VALUE_P3].pData     = &sSensor_Turbidity.sThird_Calibration.Value;
-    sLCDObject[__SET_TUR_VALUE_P3].Scale_u8  = sSensor_Turbidity.sThird_Calibration.Scale;
-    sLCDObject[__SET_TUR_AD_P3].pData        = &sSensor_Turbidity.Third_AD_u32;
-    sLCDObject[__SET_TUR_VALUE_P4].pData     = &sSensor_Turbidity.sFourth_Calibration.Value;
-    sLCDObject[__SET_TUR_VALUE_P4].Scale_u8  = sSensor_Turbidity.sFourth_Calibration.Scale;
-    sLCDObject[__SET_TUR_AD_P4].pData        = &sSensor_Turbidity.Fourth_AD_u32;
-    
-    sLCDObject[__INFOR_FW_VERSION_2].pData   = sFirmVersion.Data_a8;
+    sLCDObject[__SC1_ID_DCU].pData      = sModemInfor.sId.Data_a8;
+    sLCDObject[__SC1_CLO_DU].pData      = &sDataSensorMeasure.Clo_Du; 
+    sLCDObject[__SC1_PH_WATER].pData    = &sDataSensorMeasure.pH_Water;   
+    sLCDObject[__SC1_NTU].pData         = &sDataSensorMeasure.NTU;   
+    sLCDObject[__SC1_SALINITY].pData    = &sDataSensorMeasure.Salinity;    
+    sLCDObject[__SC1_TEMP].pData        = &sDataSensorMeasure.Temperature;    
     
     sLCDObject[__PULSE_1].pData =  &sPulse[0].Total_u32;
     sLCDObject[__PRESS_1].pData =  &sWmVar.aPRESSURE[0].Val_i32;
@@ -454,7 +361,7 @@ static uint8_t _Cb_Display_Auto_SW (uint8_t event)
     static uint16_t cNext = 0;
     static uint8_t MarkButtPressed = false;
     
-    if (Check_Time_Out(sButton.LandMarkPressButton_u32, 60000*5) == true) {
+    if (Check_Time_Out(sButton.LandMarkPressButton_u32, 5000) == true) {
         if (MarkButtPressed == true) {
             MarkButtPressed = false;
             sLCD.sScreenNow.Index_u8 = _LCD_SCREEN_1;
@@ -541,11 +448,6 @@ void Display_Show_Screen (uint8_t screen)
     glcd_clear_buffer();
     //Show static param: stime, icon internet,...
     Display_Show_Static_Param();
-    
-    //Show state connect sensor
-    Display_Show_State_Sensor_Network(screen);
-    Display_Show_State_Calib_Sensor(screen);
-    
     //Show name of screen
     if (screen >= _LCD_SCR_CAL_CHANN_1) {
         glcd_tiny_draw_string(0, 0, "Cal.");
@@ -824,16 +726,6 @@ uint8_t Display_Check_Password (uint8_t pPass[])
     return true;
 }
 
-uint8_t Display_Check_PassCalib (uint8_t pPass[])
-{
-    for (uint8_t i = 0; i < sizeof(aPASSCALIB); i++) {
-        if (pPass[i] != aPASSCALIB[i])
-            return false;
-    }
-    
-    return true;
-}
-
 
 /*
     Func: sub process up button: control config pressure
@@ -985,98 +877,6 @@ void Display_Show_Static_Param (void)
     
     //Hien thi gáº¡ch duoi
     glcd_draw_line(0, 8, 127, 8, BLACK); 
-}
-
-/*
-    Func: show static param
-        + stime
-        + icon: internet, baterry, "____"
-*/
-void Display_Show_State_Sensor_Network (uint8_t screen)
-{
-    if(screen == _LCD_SCREEN_CM44)
-    {
-        if(sSensor_pH.State_Connect == _SENSOR_DISCONNECT)
-        {
-            glcd_tiny_draw_string(120, sLCDObject[__SC1_PH_WATER].Row_u8, " ");
-        }
-        else
-        {
-            glcd_tiny_draw_string(120, sLCDObject[__SC1_PH_WATER].Row_u8, "N");
-        }
-        
-        if(sSensor_Clo.State_Connect == _SENSOR_DISCONNECT)
-        {
-            glcd_tiny_draw_string(120, sLCDObject[__SC1_CLO_DU].Row_u8, " ");
-            glcd_tiny_draw_string(120, sLCDObject[__SC1_TEMP].Row_u8, " ");
-        }
-        else
-        {
-            glcd_tiny_draw_string(120, sLCDObject[__SC1_CLO_DU].Row_u8, "N");
-            glcd_tiny_draw_string(120, sLCDObject[__SC1_TEMP].Row_u8, "N");
-        }
-        
-        if(sSensor_EC.State_Connect == _SENSOR_DISCONNECT)
-        {
-            glcd_tiny_draw_string(120, sLCDObject[__SC1_EC].Row_u8, " ");
-            glcd_tiny_draw_string(120, sLCDObject[__SC1_SALINITY].Row_u8, " ");
-        }
-        else
-        {
-            glcd_tiny_draw_string(120, sLCDObject[__SC1_EC].Row_u8, "N");
-            glcd_tiny_draw_string(120, sLCDObject[__SC1_SALINITY].Row_u8, "N");
-        }
-        
-        if(sSensor_Turbidity.State_Connect == _SENSOR_DISCONNECT)
-        {
-            glcd_tiny_draw_string(120, sLCDObject[__SC1_NTU].Row_u8, " ");
-        }
-        else
-        {
-            glcd_tiny_draw_string(120, sLCDObject[__SC1_NTU].Row_u8, "N");
-        }
-    }
-}
-
-/*
-    Func: show static param
-        + stime
-        + icon: internet, baterry, "____"
-*/
-void Display_Show_State_Calib_Sensor (uint8_t screen)
-{
-    if(screen == _LCD_SCR_SET_CALIB_STATE)
-    {
-        switch(sDataSensorMeasure.State_Wait_Calib)
-        {
-            case _STATE_CALIB_FREE:
-              sLCDObject[__SET_CALIB_STATE].pData = aSTT_CALIB_FREE;
-              break;
-              
-            case _STATE_CALIB_ENTER:
-              sLCDObject[__SET_CALIB_STATE].pData = aSTT_CALIB_ENTER;
-              break;
-
-            case _STATE_CALIB_WAIT:
-              sLCDObject[__SET_CALIB_STATE].pData = aSTT_CALIB_WAIT;
-              break;
-              
-            case _STATE_CALIB_DONE:
-              sLCDObject[__SET_CALIB_STATE].pData = aSTT_CALIB_DONE;
-              break;
-              
-            case _STATE_CALIB_ERROR:
-              sLCDObject[__SET_CALIB_STATE].pData = aSTT_CALIB_ERROR;
-              break;
-              
-            default:
-              break;
-        }
-    }
-    else
-    {
-        sLCDObject[__SET_CALIB_STATE].pData = aSTT_CALIB_FREE;
-    }
 }
 
 

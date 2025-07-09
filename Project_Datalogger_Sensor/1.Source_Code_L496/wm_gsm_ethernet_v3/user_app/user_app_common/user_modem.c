@@ -2058,10 +2058,6 @@ void Modem_Packet_MePDV (sData *pData)
     
 #endif
     
-    *(pData->Data_a8 + pData->Length_u16++) = OBIS_DCU_TYPE;  
-    *(pData->Data_a8 + pData->Length_u16++) = 0x01;   
-    *(pData->Data_a8 + pData->Length_u16++) = 0x00;   
-    
     *(pData->Data_a8 + pData->Length_u16++) = OBIS_INDEX_OBIS_TSVH;   
     *(pData->Data_a8 + pData->Length_u16++) = 0x08;
     *(pData->Data_a8 + pData->Length_u16++) = OBIS_TIME_DEVICE; 
@@ -2070,7 +2066,6 @@ void Modem_Packet_MePDV (sData *pData)
     *(pData->Data_a8 + pData->Length_u16++) = OBIS_ENVI_NTU; 
     *(pData->Data_a8 + pData->Length_u16++) = OBIS_ENVI_SALINITY_UNIT; 
     *(pData->Data_a8 + pData->Length_u16++) = OBIS_ENVI_OXY_TEMPERATURE; 
-    *(pData->Data_a8 + pData->Length_u16++) = OBIS_ENVI_EC; 
     *(pData->Data_a8 + pData->Length_u16++) = OBIS_RSSI_1; 
     *(pData->Data_a8 + pData->Length_u16++) = OBIS_FREQ_SEND; 
     
