@@ -217,19 +217,6 @@ typedef struct
     sData*  (*pGet_ID) (void); 
 }sAppWmVariable;
 
-
-typedef struct
-{
-    uint8_t CountDisconnectRS485_1;
-    uint8_t CountDisconnectRS485_2;
-    int16_t Clo_Du;
-    int16_t pH_Water;
-    int16_t NTU;
-    int16_t Salinity;
-    int16_t Temperature;
-}Struct_Data_Sensor_Measure;
-
-
 extern Struct_Battery_Status    sBattery;
 extern Struct_Battery_Status    sVout;
 extern Struct_Battery_Status    sPressure;
@@ -245,7 +232,6 @@ extern uint32_t *pPulseLPTIM;
 extern sEvent_struct        sEventAppWM[];
 extern sAppWmVariable       sWmVar;
 
-extern Struct_Data_Sensor_Measure sDataSensorMeasure;
 /*================ Function =================*/
 
 //Function handler

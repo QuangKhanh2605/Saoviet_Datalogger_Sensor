@@ -69,6 +69,8 @@ build user_app_sim.pbi : index user_app_sim.xcl
 build user_app_sms_call.pbi : index user_app_sms_call.xcl
 build button.pbi : index button.xcl
 build lcd_display.pbi : index lcd_display.xcl
+build user_app_rs485.pbi : index user_app_rs485.xcl
+build user_app_sensor.pbi : index user_app_sensor.xcl
 build user_app_wm.pbi : index user_app_wm.xcl
 build user_rs485.pbi : index user_rs485.xcl
 build user_wm_digital.pbi : index user_wm_digital.xcl
@@ -84,6 +86,7 @@ build MQTTSubscribeClient.pbi : index MQTTSubscribeClient.xcl
 build MQTTSubscribeServer.pbi : index MQTTSubscribeServer.xcl
 build MQTTUnsubscribeClient.pbi : index MQTTUnsubscribeClient.xcl
 build MQTTUnsubscribeServer.pbi : index MQTTUnsubscribeServer.xcl
+build user_convert_variable.pbi : index user_convert_variable.xcl
 build dhcp.pbi : index dhcp.xcl
 build dns.pbi : index dns.xcl
 build w5500.pbi : index w5500.xcl
@@ -136,13 +139,13 @@ build wm_gsm_ethernet_v3_part0.pbi : link adc.pbi dma.pbi gpio.pbi i2c.pbi lptim
 build wm_gsm_ethernet_v3_part1.pbi : link usart.pbi system_stm32l4xx.pbi stm32l4xx_hal.pbi stm32l4xx_hal_adc.pbi stm32l4xx_hal_adc_ex.pbi stm32l4xx_hal_cortex.pbi stm32l4xx_hal_dma.pbi stm32l4xx_hal_dma_ex.pbi stm32l4xx_hal_exti.pbi stm32l4xx_hal_flash.pbi stm32l4xx_hal_flash_ex.pbi
 build wm_gsm_ethernet_v3_part2.pbi : link stm32l4xx_hal_flash_ramfunc.pbi stm32l4xx_hal_gpio.pbi stm32l4xx_hal_i2c.pbi stm32l4xx_hal_i2c_ex.pbi stm32l4xx_hal_lptim.pbi stm32l4xx_hal_pwr.pbi stm32l4xx_hal_pwr_ex.pbi stm32l4xx_hal_rcc.pbi stm32l4xx_hal_rcc_ex.pbi stm32l4xx_hal_rtc.pbi stm32l4xx_hal_rtc_ex.pbi
 build wm_gsm_ethernet_v3_part3.pbi : link stm32l4xx_hal_spi.pbi stm32l4xx_hal_spi_ex.pbi stm32l4xx_hal_tim.pbi stm32l4xx_hal_tim_ex.pbi stm32l4xx_hal_uart.pbi stm32l4xx_hal_uart_ex.pbi user_app_comm.pbi user_log.pbi user_modem.pbi user_app_ethernet.pbi user_app_mem.pbi
-build wm_gsm_ethernet_v3_part4.pbi : link user_mqtt.pbi user_app_sim.pbi user_app_sms_call.pbi button.pbi lcd_display.pbi user_app_wm.pbi user_rs485.pbi user_wm_digital.pbi user_at_serial.pbi user_uart.pbi MQTTConnectClient.pbi
-build wm_gsm_ethernet_v3_part5.pbi : link MQTTConnectServer.pbi MQTTDeserializePublish.pbi MQTTFormat.pbi MQTTPacket.pbi MQTTSerializePublish.pbi MQTTSubscribeClient.pbi MQTTSubscribeServer.pbi MQTTUnsubscribeClient.pbi MQTTUnsubscribeServer.pbi dhcp.pbi dns.pbi
-build wm_gsm_ethernet_v3_part6.pbi : link w5500.pbi socket.pbi wizchip_conf.pbi user_lptim.pbi cat24mxx.pbi S25FL216K.pbi user_internal_mem.pbi user_mem_comm.pbi user_ec200u.pbi user_l506.pbi user_l511.pbi
-build wm_gsm_ethernet_v3_part7.pbi : link user_sim.pbi user_sim_common.pbi level_S_YW_01B.pbi level_SUP_PX261_B.pbi level_ultrasonic.pbi wm_mt100.pbi woteck_wm.pbi event_driven.pbi NT75451.pbi PCD8544.pbi ST7565R.pbi
-build wm_gsm_ethernet_v3_part8.pbi : link STM32F0xx.pbi STM32F10x.pbi STM32F4.pbi STM32L4.pbi glcd.pbi graphics.pbi graphs.pbi text.pbi text_tiny.pbi unit_tests.pbi queue_p.pbi
-build wm_gsm_ethernet_v3_part9.pbi : link user_rtc.pbi user_timer.pbi user_adv_trace.pbi onchipflash.pbi user_adc.pbi user_json.pbi user_lpm.pbi user_modbus_rtu.pbi user_obis_sv.pbi user_string.pbi user_time.pbi
-build wm_gsm_ethernet_v3_part10.pbi : link user_tiny_vsnprintf.pbi user_util.pbi
+build wm_gsm_ethernet_v3_part4.pbi : link user_mqtt.pbi user_app_sim.pbi user_app_sms_call.pbi button.pbi lcd_display.pbi user_app_rs485.pbi user_app_sensor.pbi user_app_wm.pbi user_rs485.pbi user_wm_digital.pbi user_at_serial.pbi
+build wm_gsm_ethernet_v3_part5.pbi : link user_uart.pbi MQTTConnectClient.pbi MQTTConnectServer.pbi MQTTDeserializePublish.pbi MQTTFormat.pbi MQTTPacket.pbi MQTTSerializePublish.pbi MQTTSubscribeClient.pbi MQTTSubscribeServer.pbi MQTTUnsubscribeClient.pbi MQTTUnsubscribeServer.pbi
+build wm_gsm_ethernet_v3_part6.pbi : link user_convert_variable.pbi dhcp.pbi dns.pbi w5500.pbi socket.pbi wizchip_conf.pbi user_lptim.pbi cat24mxx.pbi S25FL216K.pbi user_internal_mem.pbi user_mem_comm.pbi
+build wm_gsm_ethernet_v3_part7.pbi : link user_ec200u.pbi user_l506.pbi user_l511.pbi user_sim.pbi user_sim_common.pbi level_S_YW_01B.pbi level_SUP_PX261_B.pbi level_ultrasonic.pbi wm_mt100.pbi woteck_wm.pbi event_driven.pbi
+build wm_gsm_ethernet_v3_part8.pbi : link NT75451.pbi PCD8544.pbi ST7565R.pbi STM32F0xx.pbi STM32F10x.pbi STM32F4.pbi STM32L4.pbi glcd.pbi graphics.pbi graphs.pbi text.pbi
+build wm_gsm_ethernet_v3_part9.pbi : link text_tiny.pbi unit_tests.pbi queue_p.pbi user_rtc.pbi user_timer.pbi user_adv_trace.pbi onchipflash.pbi user_adc.pbi user_json.pbi user_lpm.pbi user_modbus_rtu.pbi
+build wm_gsm_ethernet_v3_part10.pbi : link user_obis_sv.pbi user_string.pbi user_time.pbi user_tiny_vsnprintf.pbi user_util.pbi
 build wm_gsm_ethernet_v3.pbd : link wm_gsm_ethernet_v3_part0.pbi wm_gsm_ethernet_v3_part1.pbi wm_gsm_ethernet_v3_part2.pbi wm_gsm_ethernet_v3_part3.pbi wm_gsm_ethernet_v3_part4.pbi wm_gsm_ethernet_v3_part5.pbi wm_gsm_ethernet_v3_part6.pbi wm_gsm_ethernet_v3_part7.pbi wm_gsm_ethernet_v3_part8.pbi wm_gsm_ethernet_v3_part9.pbi wm_gsm_ethernet_v3_part10.pbi
 build wm_gsm_ethernet_v3.pbw : browsedata wm_gsm_ethernet_v3.pbd
 

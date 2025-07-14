@@ -25,7 +25,7 @@ if not "%~1" == "" goto debugFile
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "D:\Project_STM32\4.wm_gsm_ethernet_v3\4.wm_gsm_ethernet_v3\8.BootLoader_L496VG\EWARM\settings\wm_gsm_ethernet_v3.wm_gsm_ethernet_v3.general.xcl" --backend -f "D:\Project_STM32\4.wm_gsm_ethernet_v3\4.wm_gsm_ethernet_v3\8.BootLoader_L496VG\EWARM\settings\wm_gsm_ethernet_v3.wm_gsm_ethernet_v3.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "D:\Saoviet_Bitbucket\Saoviet_Datalogger_Sensor\Project_Datalogger_Sensor\8.BootLoader_L496VG\EWARM\settings\wm_gsm_ethernet_v3.wm_gsm_ethernet_v3.general.xcl" --backend -f "D:\Saoviet_Bitbucket\Saoviet_Datalogger_Sensor\Project_Datalogger_Sensor\8.BootLoader_L496VG\EWARM\settings\wm_gsm_ethernet_v3.wm_gsm_ethernet_v3.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "D:\Project_STM32\4.wm_gsm_ethernet_v3\4.wm_gsm_ethernet_v3\8.BootLoader_L496VG\EWARM\settings\wm_gsm_ethernet_v3.wm_gsm_ethernet_v3.general.xcl" "--debug_file=%~1" --backend -f "D:\Project_STM32\4.wm_gsm_ethernet_v3\4.wm_gsm_ethernet_v3\8.BootLoader_L496VG\EWARM\settings\wm_gsm_ethernet_v3.wm_gsm_ethernet_v3.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "D:\Saoviet_Bitbucket\Saoviet_Datalogger_Sensor\Project_Datalogger_Sensor\8.BootLoader_L496VG\EWARM\settings\wm_gsm_ethernet_v3.wm_gsm_ethernet_v3.general.xcl" "--debug_file=%~1" --backend -f "D:\Saoviet_Bitbucket\Saoviet_Datalogger_Sensor\Project_Datalogger_Sensor\8.BootLoader_L496VG\EWARM\settings\wm_gsm_ethernet_v3.wm_gsm_ethernet_v3.driver.xcl" 
 
 @echo off 
 :end

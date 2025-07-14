@@ -16,6 +16,7 @@ uint8_t     Convert_Point_Int_To_String(uint8_t cData[], uint16_t *Pos, int var)
 uint8_t     Convert_Point_Int_To_String_Scale(uint8_t cData[], uint16_t *Pos, int var, uint8_t Scale);
 void        Insert_String_To_String(uint8_t destination[], uint16_t *PosDes, uint8_t source[], uint16_t PosSour, uint32_t length);
 
+uint32_t    Convert_String_To_Dec(uint8_t *pData, uint8_t lenData);
 
 void        Convert_uint32Hex_To_Float(uint32_t uint32Hex, float *Var);
 #endif

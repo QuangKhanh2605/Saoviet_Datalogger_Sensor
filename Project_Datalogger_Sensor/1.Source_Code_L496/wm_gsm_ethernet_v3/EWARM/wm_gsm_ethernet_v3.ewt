@@ -1410,6 +1410,18 @@
                 <name>$PROJ_DIR$\..\user_app\user_app_wm\lcd_display.h</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\user_app\user_app_wm\user_app_rs485.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\user_app\user_app_wm\user_app_rs485.h</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\user_app\user_app_wm\user_app_sensor.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\user_app\user_app_wm\user_app_sensor.h</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\user_app\user_app_wm\user_app_wm.c</name>
             </file>
             <file>
@@ -1480,6 +1492,15 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\user_component\mqtt_lib\src\MQTTUnsubscribeServer.c</name>
+            </file>
+        </group>
+        <group>
+            <name>user_convert_variable</name>
+            <file>
+                <name>$PROJ_DIR$\..\user_component\user_convert_variable\user_convert_variable.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\user_component\user_convert_variable\user_convert_variable.h</name>
             </file>
         </group>
         <group>

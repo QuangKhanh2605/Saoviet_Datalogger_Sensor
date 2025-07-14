@@ -27,6 +27,7 @@
 #define OBIS_NET_STATUS     0x10
 #define OBIS_TYPE           0x11
 
+#define OBIS_DCU_TYPE               0x11
 #define OBIS_INDEX_OBIS_TSVH        0x15
 
 #define OBIS_EMET_VOL               0x20
@@ -84,6 +85,7 @@
 #define OBIS_ENVI_PH_WATER          0x73
 #define OBIS_ENVI_OXY_MG_L          0x74
 #define OBIS_ENVI_SALINITY          0x75    //(ppt)
+#define OBIS_ENVI_EC                0x7F    //(uS/cm)
 #define OBIS_ENVI_OXY_PERCENT       0x8B
 #define OBIS_ENVI_SALINITY_UNIT     0x8C    //(%)
 #define OBIS_ENVI_CLO_DU            0x8D
@@ -107,6 +109,8 @@
 #define OBIS_SETT_PRESS_FACTOR      0xCA
 #define OBIS_SETT_PRESS_TYPE        0xCB
 
+#define OBIS_WARNING_SENSOR_CONNECT 0xD9
+#define OBIS_WARNING_SENSOR_THREAD  0xD6
 
 
 void SV_Protocol_Packet_Data (uint8_t *pTarget, uint16_t *LenTarget, uint8_t Obis, 
